@@ -1,0 +1,8 @@
+{
+	"CREST":{
+		"SSO_URL":"https://login.eveonline.com/oauth/authorize",
+		"BASE":"crest-tq.eveonline.com",
+		"APP_ID":"",
+		"APP_KEY":""
+	}
+}
