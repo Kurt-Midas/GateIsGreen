@@ -19,10 +19,13 @@ var url = require('url');
 
 router.use(bodyParser.json());
 
+
+var sessionManager = require('./SessionDbManager')
+
 const REDIRECT = 301;
 const BAD_DEVELOPER = 500;
 
-var sqlite3 = require('sqlite3').verbose();
+/*var sqlite3 = require('sqlite3').verbose();
 var db = new sqlite3.Database(':memory:','', function(openErr){ //may need to specify types
 	if(openErr){
 		console.error("Failed creating in-memory storage", openErr);
@@ -39,7 +42,7 @@ var db = new sqlite3.Database(':memory:','', function(openErr){ //may need to sp
 	+"authtoken varchar(100) DEFAULT NULL,"
 	+"refreshtoken varchar(100) DEFAULT NULL,"
 	+"created integer DEFAULT NULL,"
-	+"PRIMARY KEY (key))");
+	+"PRIMARY KEY (key))");*/
 
 
 
@@ -48,26 +51,35 @@ var db = new sqlite3.Database(':memory:','', function(openErr){ //may need to sp
 router.post('/createFleet', function(req, res){
 	if(!req.body.fleetid){
 		res.status(MISSING_DATA).send("Missing required field:fleetid");
+		//TODO: verify numeric. This is put into API calls, highly unsafe
 	}
-	var state = sha1(config.CREST.APP_ID + req.body.fleetid);
-	var date = new Date();
+	// var state = sha1(config.CREST.APP_ID + req.body.fleetid);
+	
+	sessionManager.createSetupStateEntry(req.body.fleetid, function(dberr, state){
+		if(dberr){
+			console.error("Error creating session egg:", dberr);
+			res.status(BAD_DEVELOPER).send("Failed to create session egg. This is bad, please contact the dev");
+		}
+		var ssoLink = config.CREST.SSO_URL
+			+ "/?response_type=code"
+			+ "&redirect_uri=http://localhost:3000/setup/initialize" //TODO: config this shit
+			+ "&client_id=" + config.CREST.APP_ID
+			+ "&scope=fleetWrite+fleetRead" //TODO: exact wording of fleet_write and fleet_read
+			+ "&state="+state;
+		console.log("ssoLink:",ssoLink);
+		res.status(200).send({"redirect":ssoLink});
+	})
+	
+});
+
+/*function createSetupStateEntry(fleetid, callback){
+	var state = sha1(config.CREST.APP_ID + fleetid);
 	db.run('INSERT INTO setup (state, fleetid, created) VALUES (?,?,?)',
 	 [state, req.body.fleetid, date.getUTCMilliseconds()],
 	 function(insertError){
-	 	if(insertError){
-	 		console.error("Failed to create egg", insertError);
-	 		res.status(BAD_DEVELOPER).send("Please report to developer");
-	 	}
+	 	callback(insertError, state);
 	 });
-	var ssoLink = config.CREST.SSO_URL
-		+ "/?response_type=code"
-		+ "&redirect_uri=http://localhost:3000/setup/initialize" //TODO: config this shit
-		+ "&client_id=" + config.CREST.APP_ID
-		+ "&scope=fleetWrite+fleetRead" //TODO: exact wording of fleet_write and fleet_read
-		+ "&state="+state;
-	console.log("ssoLink:",ssoLink);
-	res.status(200).send({"redirect":ssoLink});
-});
+}*/
 
 
 
@@ -103,7 +115,7 @@ function exchangeAuthToken(authToken, callback){
 	})
 }
 
-function createFleetDBEntry(info, callback){ //info has key, fleetid authToken, refreshToken
+/*function createFleetDBEntry(info, callback){ //info has key, fleetid, authToken, refreshToken
 	if(!info || !info.authToken || !info.refreshToken || !info.key || !info.fleetid){
 		callback("YOU USED THIS WRONG");
 	}
@@ -116,16 +128,16 @@ function createFleetDBEntry(info, callback){ //info has key, fleetid authToken, 
 			callback(null, info.key)
 		}
 	)
-}
+}*/
 
-function checkStateEntryExists(state, callback){
+/*function checkStateEntryExists(state, callback){
 	db.get('SELECT * FROM setup WHERE state=?',[state], function(dbErr, row){
 		if(!row || dbErr){
 			callback(dbErr);
 		}
 		callback(null, row.fleetid);
 	})
-}
+}*/
 
 router.get('/initialize', function(req, res){
 	console.log("Got callback from SSO to 'request' package method:");
@@ -134,7 +146,7 @@ router.get('/initialize', function(req, res){
 	console.log("Params:", req.params);
 	var state = req.query.state;
 
-	checkStateEntryExists(state, function(stateErr, fleetid){
+	sessionManager.checkStateEntryExists(state, function(stateErr, fleetid){
 		if(stateErr){
 			console.log("State Error:", stateErr);
 			res.status(500).send("State Error");
@@ -151,7 +163,7 @@ router.get('/initialize', function(req, res){
 				"refreshToken": refreshToken
 			}
 			console.log(info);
-			createFleetDBEntry(info, function(persistErr, dbKey){
+			sessionManager.createFleetDBEntry(info, function(persistErr, dbKey){
 				if(persistErr){
 					console.log("Persist Error:", persistErr);
 					res.status(500).send("Persist Error");
