@@ -20,34 +20,15 @@ var db = new sqlite3.Database(':memory:','', function(openErr){ //may need to sp
 	+"created integer DEFAULT NULL,"
 	+"PRIMARY KEY (key))");
 
+var maxTokenAge = 1200000; //20 minutes
+var acceptableTokenAge = 900000; //15 minutes
+//might want to config this stuff
+
 module.exports = {
-	createFleetDBEntry: function createFleetDBEntry(info, callback){ //info has key, fleetid, authToken, refreshToken
-		if(!info || !info.authToken || !info.refreshToken || !info.key || !info.fleetid){
-			callback("Bad usage of createFleetDBEntry: missing parameter in 'info' object");
-		}
-		db.run("INSERT INTO fleets VALUES (?,?,?,?,?)", 
-			[info.key, info.fleetid, info.authToken, info.refreshToken, 0], //TODO: time
-			function(insertErr){
-				if(insertErr){
-					callback(insertErr)
-				}
-				callback(null, info.key)
-			}
-		)
-	},
-	checkStateEntryExists: function checkStateEntryExists(state, callback){
-		db.get('SELECT * FROM setup WHERE state=?',[state], function(dbErr, row){
-			if(!row || dbErr){
-				callback(dbErr);
-			}
-			callback(null, row.fleetid);
-		})
-	},
-	createSetupStateEntry: function createSetupStateEntry(fleetid, callback){
+	createSetupStateEgg: function(fleetid, callback){
 		var state = sha1(config.CREST.APP_ID + fleetid);
-		var date = new Date();
 		db.run('INSERT INTO setup (state, fleetid, created) VALUES (?,?,?)',
-		 [state, fleetid, date.getUTCMilliseconds()],
+		 [state, fleetid, new Date().getTime()],
 		 function(insertError){
 		 	/*if(insertError){
 		 		console.error("Failed to create setup egg", insertError);
@@ -57,5 +38,61 @@ module.exports = {
 		 	callback(null, state);*/
 		 	callback(insertError, state);
 		 });
+	},
+	checkStateEggExists: function(state, callback){
+		db.get('SELECT * FROM setup WHERE state=?',[state], function(dbErr, row){
+			if(!row || dbErr){
+				callback(dbErr);
+				return;
+			}
+			callback(null, row.fleetid);
+		})
+	},
+	createFleetDBSession: function(info, callback){ //info has key, fleetid, authToken, refreshToken
+		if(!info || !info.authToken || !info.refreshToken || !info.key || !info.fleetid){
+			callback("Bad usage of createFleetDBEntry: missing parameter in 'info' object");
+		}
+		db.run("INSERT INTO fleets VALUES (?,?,?,?,?)", 
+			[info.key, info.fleetid, info.authToken, info.refreshToken, new Date().getTime()],
+			function(insertErr){
+				if(insertErr){
+					callback(insertErr)
+				}
+				callback(null, info.key)
+			}
+		)
+	},
+	getSessionDetails : function(key, callback){
+		if(!key){
+			callback("No key provided", null);
+		}
+		db.get('SELECT * FROM fleets WHERE key=?', [key], function(dbErr, row){
+			if(!row || dbErr){
+				callback(dbErr, null);
+				return;
+			}
+			// console.log("Got session from db:", row);
+			//should be key, fleetid, authToken, refreshToken, created at UTC millis
+			var age = new Date().getTime - row.created;
+			if(age > acceptableTokenAge){
+				//TODO: refresh auth token
+				console.warn("This key is approaching/past end-of-life");
+				callback(null, row);
+			} else {
+				console.log("Still a young token");
+				callback(null, row);
+			}
+		})
+	},
+	replaceAuthToken : function(key, authToken, callback){
+		if(!key || !authToken){
+			callback("Missing parameters to replaceAuthToken method");
+		}
+		db.run("UPDATE fleets SET authtoken = ? WHERE key = ?",
+			[authToken, key],
+			function(dbErr){
+				callback(dbErr)
+			}
+		)
 	}
 }

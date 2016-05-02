@@ -1,53 +1,64 @@
-/*
-/fleets/fleetID:integerType/members/ *
-	Member info. Includes (not limited to)
-		Fleet Warp?
-		Join time
-		role
-		booster?
-		ship type
-		location
-		position in fleet
-	POST to invite [to wings/squads]
-/fleets/fleetID:integerType/members/memberID:characterIdType/
-	PUT to move around, DELETE to kick
-*/
-
-// var http = require('http');
-// var bodyParser = require('body-parser');
 var config = require('config');
-var utils = require('../src/Utils.js')
+var utils = require('../src/Utils.js');
+// var sso = require('./SSOHandler');
+var sessionManager = require('./SessionDbManager')
+var url = require('url');
+//TODO: decouple stuff to implement walkable API
 
 const CREST = config.get('CREST');
 
 // router.use(bodyParser.json());
 // router.use(bodyParser.urlencoded({extended:true}));
 
-/* ASSUMPTION
-[{	"memberID":#charid:integer,
-	"fleetwarp":#takesFleetWarp:boolean,
-	"role":#role:string?,
-	"booster":#isBooster:boolean,
-	"shipType":#shipTypeID:integer,
-	"location":#solarSystemID:integer,
-	"fleetPosition":#fleetPosition:integer?	}]*/
-/**
- * Makes a call to get /fleets/fleetID:integerType/members endpoint and fires the callback on a JSONified result
- * @param  {[type]} fleetID [description]
- * @return {[type]}         [description]
- */
-function getAllFleetMemberInfo(fleetID, callback){
-	var options = {
-		host: CREST.BASE,
-		path: "/fleets/" + fleetID + "/members/",
-		Authorization: "Bearer " + CREST.AUTH_KEY,
-		Accept: "application/vnd.ccp.eve.Api-v3+json"
-	};
-	console.log("options:", options);
-	utils.remoteApiCaller(options, callback);
+module.exports = {
+	getFleetInfo : function(key, callback){
+		sessionManager.getSessionDetails(key, function(err, details){
+			if(err){
+				console.error("Error in getAuthOptionsSeed:", err);
+				callback(err);
+				return;
+			}
+			if(!details || !details.key || !details.fleetid || !details.authtoken || !details.refreshtoken || !details.created){
+				console.error("Not all details are present:", details);
+				callback("Not all details are present");
+				return;
+			}
+			var authHeader = {"Authorization": "Bearer " + details.authtoken}
+			var urlObj = {
+				protocol: 'https',
+				host: 'crest-tq.eveonline.com',
+				pathname: '/fleets/' + details.fleetid + '/'
+			}
+			var fleetOptions = {
+				url: url.format(urlObj),
+				headers: authHeader
+			}
+			utils.remoteGet(fleetOptions, function(fleetErr, fleetBody){
+				if(fleetErr){
+					console.error("Failed to get base fleet URL:", fleetErr)
+					callback("Failed to call fleet endpoint");
+					return;
+				}
+				//TODO: handle fleetBody
+				//also fleetBody.wings.href and stuff
+				var memberOptions = {
+					url: fleetBody.members.href,
+					headers: authHeader
+				}
+				utils.remoteGet(memberOptions, function(memberErr, memberBody){
+					if(memberErr){
+						console.error("Failed at member endpoint:", memberErr);
+						console.error("Failed to call member endpoint");
+					}
+					//TODO: handle memberBody
+					callback(null, "Successfully called everything and did nothing with it");
+					return;
+				})
+			})
+		})
+		// utils.remoteGet(options, callback)
+	}
 }
 
-var service = {};
-service.getAllFleetMemberInfo = getAllFleetMemberInfo;
-
-module.exports = service;
+// var maxTokenAge = 1200000; //20 minutes
+// var acceptableTokenAge = 900000; //15 minutes
