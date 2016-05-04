@@ -1,0 +1,63 @@
+
+module.exports = {
+	getMemberDisplay: function(memberResponse){
+		if(!memberResponse || !memberResponse.items){
+			console.error("No fleet members?! Quite impossible. Error case or deleted fleet?", memberResponse)
+			return null;
+		};
+		var membersArray = [];
+		for(var i = 0; i < memberResponse.items.length; i++){
+			if(!memberResponse.items[i].character || !memberResponse.items[i].solarSystem){
+				console.error("Failed to find character or location information, printing:", memberResponse.items[i]);
+				continue;
+			};
+			var charInfo = {
+				"id":		memberResponse.items[i].character.id_str,
+				"name":		memberResponse.items[i].character.name,
+				"shipId":	memberResponse.items[i].ship.id_str
+			};
+			var stationName = null;
+			if(memberResponse.items[i].station){
+				stationName = memberResponse.items[i].station.name
+			};
+			var locInfo = {
+				"systemid":	memberResponse.items[i].solarSystem.id_str,
+				"station":	memberResponse.items[i].station.name
+			};
+			var fleetInfo = {
+				"takesFleetWarp": 	memberResponse.items[i].takesFleetWarp,
+				"wingID":			memberResponse.items[i].wingID_str,
+				"squadID":			memberResponse.items[i].squadID_str,
+				"boosterID":		memberResponse.items[i].boosterID_str,
+				"roleID":			memberResponse.items[i].roleID_str,
+				"boosterName":		memberResponse.items[i].boosterName,
+				"roleName":			memberResponse.items[i].roleName,
+				"joinTime":			memberResponse.items[i].joinTime
+			};
+			membersArray.push({
+				cha: 	charInfo,
+				loc: 	locInfo,
+				fleet: 	fleetInfo
+			});
+		};
+		return membersArray;
+	},
+	getFleetDisplay: function(fleetResponse){
+		if(!fleetResponse){
+			console.error("No argument passed to getFleetDisplay:", fleetResponse)
+			return null;
+		}
+
+		return {
+			isVoiceEnabled:	fleetResponse.isVoiceEnabled,
+			motd: 			fleetResponse.motd,
+			isFreeMove: 	fleetResponse.isFreeMove,
+			isRegistered: 	fleetResponse.isRegistered
+		};
+		// fleetResponse.members.href //not part of display
+		// fleetResponse.wings.href; //not part of display
+	},
+	getWingDisplay : function(wingResponse){
+
+	}
+}

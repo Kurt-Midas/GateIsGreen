@@ -40,6 +40,7 @@ module.exports = {
 		 });
 	},
 	checkStateEggExists: function(state, callback){
+		//TODO: delete the entry
 		db.get('SELECT * FROM setup WHERE state=?',[state], function(dbErr, row){
 			if(!row || dbErr){
 				callback(dbErr);

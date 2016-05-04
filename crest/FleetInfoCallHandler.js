@@ -1,9 +1,10 @@
 var config = require('config');
 var utils = require('../src/Utils.js');
 // var sso = require('./SSOHandler');
-var sessionManager = require('./SessionDbManager')
+var sessionManager = require('./SessionDbManager');
 var url = require('url');
 //TODO: decouple stuff to implement walkable API
+var viewHandler = require('../src/viewHandler');
 
 const CREST = config.get('CREST');
 
@@ -50,8 +51,10 @@ module.exports = {
 						console.error("Failed at member endpoint:", memberErr);
 						console.error("Failed to call member endpoint");
 					}
-					//TODO: handle memberBody
-					callback(null, "Successfully called everything and did nothing with it");
+					callback(null, {
+						fleetinfo: 		viewHandler.getFleetDisplay(fleetBody),
+						members: 		viewHandler.getMemberDisplay(memberBody)
+					})
 					return;
 				})
 			})
