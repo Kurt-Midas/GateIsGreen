@@ -15,65 +15,32 @@
 	<script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
 
 	<script src="controller/baseController.js"></script>
+	<script src="fleet/js/FleetController.js"></script>
+	<script src="landing/js/LandingController.js"></script>
+	<script src="fleet/js/FleetDataService.js"></script>
+	<script src="fleet/js/SdeDataService.js"></script>
+	<script src="fleet/directives/AggregateDirective.js"></script>
+	<script src="fleet/directives/IndividualDirective.js"></script>
+	<script src="fleet/directives/StructureDirective.js"></script>
+	<script src="fleet/directives/WelcomeDirective.js"></script>
 
 </head>
 
 <body ng-app="gateisgreen">
-	<div class="container-fluid" ng-controller="baseController">
+	<div ng-hide="true">
+		<p>This app doesn't work in the in-game browser</p>
+		<p>The IGB only supports up to Angular 1.2 but I'm using 1.4</p>
+		<p>CCP PLZ</p>
+	</div>
+
+	<div class="container-fluid" ng-controller="BaseController as bc">
 		<row>
 			<div class="page-header col-md-12"> 
-				<h1>Gate Is Green</h1> alpha
+				<h1>Gate Is Green <small>alpha</small></h1>
 			</div>
 		</row>
-		<row>
-			<div class="col-md-6">
-				<h3>Hello Alpha Tester / Prospective Partner!</h3>
-				<p>This tool is called "Gate is Green" and uses the new Fleet API. To Summarize, it will...</p>
-				<ul>
-					<li>Come in an easy-to-deploy form so you can run your own</li>
-					<li>Allow an FC to create "Read" and "Write" links to share</li>
-					<li>Allow both types of link to:
-						<ul>
-							<li>See various aggregations of fleet member info</li>
-							<li>See a display with sortable and filterable information</li>
-							<li>See a display with fleet structure, including locations and ships of various wings</li>
-							<li>See alerts whenever pilots join/leave/move around a fleet</li>
-							<li>See alerts whenever a pilot changes ship type</li>
-							<li>See updates of this information in real-time as the CREST cache allows</li>
-						</ul>
-					</li>
-					<li>Additionally allow anyone with a "Write" link to:
-						<ul>
-							<li>Invite pilots to [specific positions in] fleets</li>
-							<li>Boot people from fleets</li>
-							<li>Move fleet members to wings/squads/roles</li>
-						</ul>
-					</li>
-				</ul>
-				<p>You may notice it does very few of these things right now. Work in progress</p>
-				<p>You can help development by providing help offers / bug reports / feature requests / feedback / exotic dancers to my character <b>Kurt Midas</b></p>
-			</div>
-
-			<div class="col-md-6">
-				<h2>How To Use</h2>
-				<ol>
-					<li>Form a fleet</li>
-					<li>Click the upper left menu and scroll down to "Copy External Fleet Link"</li>
-					<li>Paste the number (JUST THE NUMBER, I'll fix that later) into the box below and click the SSO button</li>
-					<li>This will redirect you to the official CCP SSO site. Log in and give the app
-						<ul>
-							<li>ONLY the character in charge of the fleet</li>
-							<li>ONLY fleetRead and fleetWrite permissions</li>
-						</ul>
-					</li>
-					<li>You will be redirected to the fleet management page. The link is unique and sharing that page will give full access to your fleet's information. Currently there is no required additional authentication, notifications that another user has connected, or means to boot users (in an emergency please use the Eve service site to revoke my app's SSO permissions. The next refresh will fail, deleting the session and invalidating the link, and a new link can be created).</li>
-				</ol>
-				<p>On an important note, this app might have security bugs and you don't know and shouldn't trust me. Using this tool with stratops or move ops is a very bad idea.</p>
-				<input type="number" ng-model="fleetId">
-				<button ng-click="doShit()">Redirect to Eve SSO site</button>
-				<p>Debug: Entered fleet id is {{fleetId}}</p>
-			</div>
-		</row>
+		</hr> <!-- ??? -->
+		<ng-view></ng-view>
 	</div>
 	<!-- TODO: nav -->
 

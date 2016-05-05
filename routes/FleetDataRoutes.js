@@ -12,7 +12,7 @@ router.use(bodyParser.json());
 
 var fleetService = require('../crest/FleetInfoCallHandler');
 
-router.get('/getFleetInfo:fleetSessionId', function(req, res){
+router.get('/getFleetInfo/:fleetSessionId', function(req, res){
 	if(!req.params.fleetSessionId){
 		res.status(500).send("Missing required parameter 'key'")
 	}

@@ -1,27 +1,32 @@
 var app = angular.module('gateisgreen', 
-	['ngRoute']);//, 'SdeDataService']);
+	['ngRoute', 'FleetControllerModule', 'SdeDataModule', 'FleetDataModule']);
 	//'LandingModule', 'FleetModule', 'HandshakeCalls']);
 
-/*app.config(['$routeProvider', function($routeProvider, SdeCaller, SdeInfo){
+app.config(['$routeProvider', function($routeProvider, SdeCaller, SdeInfo){
 	$routeProvider
 	.when('/',{
 		templateUrl : 'landing/LandingBase.html',
-		controller : 'LandingController'
+		controller : 'LandingController',
+		controllerAs : 'lc'
 	})
 	.when('/fleets/:fleetKey', {
-		templateUrl : 'fleet/templates/FleetBase.html',
+		templateUrl : 'fleet/FleetBase.html',
 		controller : 'FleetController',
+		controllerAs: 'fc',
 		resolve : {
 			fleetKey: function($route){
+				console.log("Resolving fleetKey");
 				return $route.current.params.fleetKey
 			},
 			isValidSession: function($route, FleetCaller, FleetInfo){
-				var response FleetCaller.callFleetInfo($route.current.params.fleetKey);
+				console.log("Resolving isValidSession");
+				var response = FleetCaller.callFleetInfo($route.current.params.fleetKey);
 				//TODO: negative scenario
 				FleetInfo.setData(response.fleetinfo, response.members);
 				return true;
 			},
-			isCalledInfo: function(SdeCalller, SdeInfo){
+			isCalledInfo: function(SdeCaller, SdeInfo){
+				console.log("Resolving isCalledInfo");
 				return SdeCaller.callSdeData().then(function(data){
 					if(!data || !data.shipInfo || !data.locations){
 						//failed, console or something
@@ -37,35 +42,8 @@ var app = angular.module('gateisgreen',
 		//Error page?
 		redirectTo : '/'
 	})
-}])*/
+}])
 
-app.controller('baseController', ['$scope', '$http', '$q', '$window',
-function($scope, $http, $q, $window){
-	$scope.fleetId = 1177711227919;
-
-	$scope.doShit = function(){
-		console.log("inside doShit");
-		var postData = {
-			method: 'POST',
-			url: '/handshake/beginHandshake',
-			data: {
-				"fleetid": $scope.fleetId
-			}
-		};
-		var defer = $q.defer();
-		$http(postData)
-		.success(function(data){
-			console.log("Successfully called setup/createFleet with reply", data);
-			defer.resolve(data);
-		}).error(function(data,status,headers,config){
-			console.error("Call to setup/create fleet failed with status" + status + "and headers" + headers)
-			defer.reject();
-		})
-		defer.promise.then(function(successVal){
-			console.log("Successful call with val:", angular.toJson(successVal))
-			$window.location.href = successVal.redirect
-		}, function(failReason){
-			console.log("failed setup call with reason: ", failReason);
-		})
-	}
+app.controller('BaseController', [function(){
+	this.hello = "Hello from BaseController";
 }])

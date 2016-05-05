@@ -13,6 +13,9 @@ server.use('/fleet', fleetDataRoutes);
 
 var handshakeRoutes = require('./routes/HandshakeRoutes');
 server.use('/handshake', handshakeRoutes);
+
+var mockRoutes = require('./routes/MockFleetData');
+server.use('/mock', mockRoutes);
 // var ssoHandler = require('./crest/SSOHandler');
 // server.use('/setup', ssoHandler);
 // 
