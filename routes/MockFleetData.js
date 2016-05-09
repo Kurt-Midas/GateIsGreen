@@ -9,7 +9,7 @@ var cerbFleet = [
 	{"ship":11993, "number":10}, //Squad 2, Cerbs
 	{"ship":11978, "number":8}, //Squad 3, Scimitars
 	{"ship":11176, "number":6}, //Squad 4, Crow
-	{"ship":22556, "number":3} //Squad 5, Sabre
+	{"ship":22456, "number":3} //Squad 5, Sabre
 ]
 
 //...I just realized I don't know how fleets work. TIL I suck at Eve
@@ -24,9 +24,9 @@ router.get('/getMockCerbFleet/:fleetSessionId', function(req, res){
 	var members = [];
 	members.push(createFleetMember(
 		fleet[0].ship.toString(), "1", "1", "1", "Fleet Booster", "1", "Wing Commander (Boss)"));
-	console.log("About to create wings:", fleet.length)
+	// console.log("About to create wings:", fleet.length);
 	for(var i = 1; i < fleet.length; i++){
-		console.log("Iterating over createSquad");
+		// console.log("Iterating over createSquad");
 		members = members.concat(createSquad(fleet[i].ship, fleet[i].number, Math.floor(Math.random() * 10000 + 2159611200000),
 			Math.floor(Math.random() * 10000 + 3251811200000).toString()));
 	}
@@ -43,7 +43,7 @@ router.get('/getMockCerbFleet/:fleetSessionId', function(req, res){
 
 function createSquad(ship, number, wingid, squadid){
 	var members = [];
-	console.log("Creating squad with size:", number);
+	// console.log("Creating squad with size:", number);
 	members.push(createFleetMember(ship, wingid, squadid, "3", "Squad Booster", "3", "Squad Commander"))
 	for(var i = 0; i < number; i++){
 		members.push(createFleetMember(ship, wingid, squadid, "4", "", "4", "Fleet Member"))
