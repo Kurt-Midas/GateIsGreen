@@ -22,7 +22,7 @@ const OKAY = 200;
  */
 router.post('/beginHandshake', function(req, res){
 	if(!req.body.fleetid){
-		res.status(MISSING_DATA).send("Missing required field:fleetid");
+		res.status(403).send("Missing required field:fleetid"); //TODO: fix
 		//TODO: verify numeric. This is put into API calls, highly unsafe
 	}
 	ssoHandler.beginHandshake(req.body.fleetid, function(err, response){

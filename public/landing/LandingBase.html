@@ -42,8 +42,8 @@
 			<li>You will be redirected to the fleet management page. The link is unique and sharing that page will give full access to your fleet's information. Currently there is no required additional authentication, notifications that another user has connected, or means to boot users (in an emergency please use the Eve service site to revoke my app's SSO permissions. The next refresh will fail, deleting the session and invalidating the link, and a new link can be created).</li>
 		</ol>
 		<p>On an important note, this app might have security bugs and you don't know and shouldn't trust me. Using this tool with stratops or move ops is a very bad idea.</p>
-		<input type="number" ng-model="fleetId">
-		<button ng-click="this.beginHandshake()">Redirect to Eve SSO site</button>
+		<input type="number" ng-model="lc.fleetId">
+		<button ng-click="lc.beginHandshake()">Redirect to Eve SSO site</button>
 		<p>Debug: Entered fleet id is {{lc.fleetId}}</p>
 	</div>
 </row>

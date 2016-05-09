@@ -1,3 +1,67 @@
 <div class="col-md-12">
-	<h2>Aggregate.html</h2>
+	<!-- TODO: add charName, wingName, squadName columns-->
+	<!-- TODO: add sorting and searching/filtering -->
+	<p>Select as many or as few boxes as desired.</p>
+	<p>Design insight: It's difficult to get pilot-specific info here like corp/alliance/sec status/zkb links for performance reasons (no way to aggregate CREST calls). If you think this is important I'll build a Pilot Info view that opens a new tab</p>
+	<div class="btn-group" data-toggle="buttons-checkbox">
+		<button type="button" class="btn-success active" autocomplete="off"
+			ng-click="agg.boxes.shipBox = !agg.boxes.shipBox">
+			Ship Type</button>
+		<button type="button" class="btn-success" autocomplete="off"
+			ng-click="agg.boxes.shipgroupBox = !agg.boxes.shipgroupBox">
+			Ship Group</button>
+	</div>
+	<div class="btn-group" data-toggle="buttons-checkbox">
+		<button type="button" class="btn-success" autocomplete="off"
+			ng-click="agg.boxes.systemBox = !agg.boxes.systemBox">
+			System</button>
+		<button type="button" class="btn-success" autocomplete="off"
+			ng-click="agg.boxes.constelBox = !agg.boxes.constelBox">
+			Constellation</button>
+		<button type="button" class="btn-success" autocomplete="off"
+			ng-click="agg.boxes.regionBox = !agg.boxes.regionBox">
+			Region</button>
+	</div>
+	<div class="btn-group" data-toggle="buttons-checkbox">
+		<button type="button" class="btn-success" autocomplete="off"
+			ng-click="agg.boxes.fleetwarpBox = !agg.boxes.fleetwarpBox">
+			Takes fleet warp</button>
+	</div>
+	<div class="btn-group" data-toggle="buttons-checkbox">
+		<button type="button" class="btn-success" autocomplete="off"
+			ng-click="agg.boxes.boosterBox = !agg.boxes.boosterBox">
+			Booster Type</button>
+	</div>
+	<div class="btn-group" data-toggle="buttons-checkbox">
+		<button type="button" class="btn-success" autocomplete="off"
+			ng-click="agg.boxes.roleBox = !agg.boxes.roleBox">
+			Role Type</button>
+	</div>
+
+	<!-- <h4>Debug <small>{{agg.aggregates.groups}}</small> </h4> -->
+	<!-- <p>{{agg.aggregates}}</p> -->
+	<table class="table table-striped table-hover">
+		<tr>
+			<th># Pilots</th>
+			<th ng-if="agg.boxes.shipBox">Ship Type</th>
+			<th ng-if="agg.boxes.shipgroupBox">Ship Group</th>
+			<th ng-if="agg.boxes.systemBox">System</th>
+			<th ng-if="agg.boxes.constelBox">Constellation</th>
+			<th ng-if="agg.boxes.regionBox">Region</th>
+			<th ng-if="agg.boxes.fleetwarpBox">Fleet Warps</th>
+			<th ng-if="agg.boxes.boosterBox">Booster Type</th>
+			<th ng-if="agg.boxes.roleBox">Role Type</th>
+		</tr>
+		<tr ng-repeat="group in agg.aggregates.groups">
+			<td>{{group.chars.length}}</td> <!-- TODO: uib tooltip with all the names in that array -->
+			<td ng-if="agg.boxes.shipBox">{{group.shipType}}</td>
+			<td ng-if="agg.boxes.shipgroupBox">{{group.shipGroup}}</td>
+			<td ng-if="agg.boxes.systemBox">{{group.system}}</td>
+			<td ng-if="agg.boxes.constelBox">{{group.constellation}}</td>
+			<td ng-if="agg.boxes.regionBox">{{group.region}}</td>
+			<td ng-if="agg.boxes.fleetwarpBox">{{group.fleetwarp}}</td>
+			<td ng-if="agg.boxes.boosterBox">{{group.boosterName}}</td>
+			<td ng-if="agg.boxes.roleBox">{{group.roleName}}</td>
+		</tr>
+	</table>
 </div>

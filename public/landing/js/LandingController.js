@@ -12,7 +12,7 @@ module.controller('LandingController',
 			method: 'POST',
 			url: '/handshake/beginHandshake',
 			data: {
-				"fleetid": $scope.fleetId
+				"fleetid": this.fleetId
 			}
 		};
 		var defer = $q.defer();

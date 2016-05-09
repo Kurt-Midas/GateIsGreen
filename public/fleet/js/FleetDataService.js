@@ -52,14 +52,23 @@ module.service('FleetInfo', [function(){
 	var members = {};
 	return {
 		setFleetinfo : function(fleetinfo){
+			console.log("Setting fleetinfo");
 			this.fleetinfo = fleetinfo;
 		},
 		setMembers : function(members){
+			console.log("Setting members");
 			this.members = members;
 		},
 		setData : function(fleetinfo, members){
+			console.log("Setting both fleetinfo, members");
 			this.fleetinfo = fleetinfo;
 			this.members = members;
+		},
+		getMembers : function(){
+			return this.members;
+		},
+		getFleetInfo : function(){
+			return this.fleetinfo;
 		},
 		getData : function(){
 			return {
