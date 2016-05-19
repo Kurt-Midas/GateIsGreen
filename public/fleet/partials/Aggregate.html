@@ -40,19 +40,47 @@
 
 	<!-- <h4>Debug <small>{{agg.aggregates.groups}}</small> </h4> -->
 	<!-- <p>{{agg.aggregates}}</p> -->
+	<p>Sort on: {{agg.sortType}}, Reversed?: {{agg.sortReverse}}</p>
 	<table class="table table-striped table-hover">
 		<tr>
-			<th># Pilots</th>
-			<th ng-if="agg.boxes.shipBox">Ship Type</th>
-			<th ng-if="agg.boxes.shipgroupBox">Ship Group</th>
-			<th ng-if="agg.boxes.systemBox">System</th>
-			<th ng-if="agg.boxes.constelBox">Constellation</th>
-			<th ng-if="agg.boxes.regionBox">Region</th>
-			<th ng-if="agg.boxes.fleetwarpBox">Fleet Warps</th>
-			<th ng-if="agg.boxes.boosterBox">Booster Type</th>
-			<th ng-if="agg.boxes.roleBox">Role Type</th>
+			<th>
+				<div sortable-col-header sort-type="agg.sortType" sort-reverse="agg.sortReverse" on-what="chars.length">
+				# Pilots</div>
+			</th>
+			<th ng-if="agg.boxes.shipBox">
+				<div sortable-col-header sort-type="agg.sortType" sort-reverse="agg.sortReverse" on-what="shipType">
+				Ship Type</div>
+			</th>
+			<th ng-if="agg.boxes.shipgroupBox">
+				<div sortable-col-header sort-type="agg.sortType" sort-reverse="agg.sortReverse" on-what="shipGroup">
+				Ship Group</div>
+			</th>
+			<th ng-if="agg.boxes.systemBox">
+				<div sortable-col-header sort-type="agg.sortType" sort-reverse="agg.sortReverse" on-what="system">
+				System</div>
+			</th>
+			<th ng-if="agg.boxes.constelBox">
+				<div sortable-col-header sort-type="agg.sortType" sort-reverse="agg.sortReverse" on-what="constellation">
+				Constellation</div>
+			</th>
+			<th ng-if="agg.boxes.regionBox">
+				<div sortable-col-header sort-type="agg.sortType" sort-reverse="agg.sortReverse" on-what="region">
+				Region</div>
+			</th>
+			<th ng-if="agg.boxes.fleetwarpBox">
+				<div sortable-col-header sort-type="agg.sortType" sort-reverse="agg.sortReverse" on-what="fleetwarp">
+				Fleet Warps</div>
+			</th>
+			<th ng-if="agg.boxes.boosterBox">
+				<div sortable-col-header sort-type="agg.sortType" sort-reverse="agg.sortReverse" on-what="boosterName">
+				Booster Type</div>
+			</th>
+			<th ng-if="agg.boxes.roleBox">
+				<div sortable-col-header sort-type="agg.sortType" sort-reverse="agg.sortReverse" on-what="roleName">
+				Role Type</div>
+			</th>
 		</tr>
-		<tr ng-repeat="group in agg.aggregates.groups">
+		<tr ng-repeat="group in agg.aggregates.groups | orderBy:agg.sortType:agg.sortReverse">
 			<td>{{group.chars.length}}</td> <!-- TODO: uib tooltip with all the names in that array -->
 			<td ng-if="agg.boxes.shipBox">{{group.shipType}}</td>
 			<td ng-if="agg.boxes.shipgroupBox">{{group.shipGroup}}</td>

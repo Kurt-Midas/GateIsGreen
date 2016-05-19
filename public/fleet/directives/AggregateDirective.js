@@ -9,6 +9,10 @@ angular.module('AggregateDirectiveModule',['SdeDataModule', 'FleetDataModule'])
 		controllerAs: 'agg',
 		controller: ['$scope', 'FleetInfo', 'SdeInfo', function($scope, FleetInfo, SdeInfo){
 			var agg = this;
+
+			agg.sortType = "chars.length";
+			agg.sortReverse = false;
+
 			agg.boxes = {};
 			agg.boxes.shipBox 			= true;
 			agg.boxes.shipgroupBox 		= false;
@@ -19,7 +23,7 @@ angular.module('AggregateDirectiveModule',['SdeDataModule', 'FleetDataModule'])
 			agg.boxes.boosterBox		= false;
 			agg.boxes.roleBox 			= false;
 
-			agg.boxes.chanameBox = false;
+			// agg.boxes.chanameBox = false;
 			// agg.boxes.wingBox = false; 	//TODO:	implement wing endpoints
 			// agg.boxes.squadBox = false;	//TODO: implement squad endpoints
 
@@ -30,7 +34,7 @@ angular.module('AggregateDirectiveModule',['SdeDataModule', 'FleetDataModule'])
 				var sdeData = SdeInfo.getData();
 				var groupings = [];
 				for(var i = 0; i < fleetmembers.length; i++){
-					console.log("Iterating over member", i, "of", fleetmembers.length, angular.toJson(fleetmembers[i]));
+					// console.log("Iterating over member", i, "of", fleetmembers.length, angular.toJson(fleetmembers[i]));
 					var member = {};
 					if(agg.boxes.shipBox){member.shipType = sdeData.ships[fleetmembers[i].shipId].shipName;} //do the translation now?
 					if(agg.boxes.shipgroupBox){member.shipGroup = sdeData.ships[fleetmembers[i].shipId].groupName;} //yep, definitely do the translation
