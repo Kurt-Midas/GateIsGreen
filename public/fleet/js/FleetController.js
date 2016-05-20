@@ -1,5 +1,6 @@
 var module = angular.module('FleetControllerModule',[
-	'SdeDataModule', 'FleetDataModule', 'ui.bootstrap', 'AggregateDirectiveModule']);
+	'SdeDataModule', 'FleetDataModule', 'ui.bootstrap', 
+	'WelcomeDirectiveModule', 'AggregateDirectiveModule', 'IndividualDirectiveModule', 'StructureDirectiveModule']);
 
 module.controller('FleetController', 
 			['fleetKey', 'isValidSession', 'isCalledInfo', 'SdeInfo', 'FleetInfo',

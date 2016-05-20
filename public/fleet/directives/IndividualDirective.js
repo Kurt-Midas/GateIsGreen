@@ -1,6 +1,6 @@
-var app = angular.module('IndividualDirectiveModule',['SdeDataModule', 'FleetDataModule'])
+var module = angular.module('IndividualDirectiveModule',['SdeDataModule', 'FleetDataModule'])
 
-app.directive('individualDirective',[function () {
+module.directive('individualDirective',[function () {
     return {
         restrict: 'E',
         templateUrl: '/fleet/partials/Individual.html',
@@ -12,29 +12,37 @@ app.directive('individualDirective',[function () {
         	ind.search = '';
         	ind.sortType = '';
         	ind.sortReverse = false;
+
+        	ind.fleetmembers = FleetInfo.getMembers();
+        	ind.sdeData = SdeInfo.getData();
+
+        	ind.showGlobalDisclaimer = function(){
+        		alert("butts lol");
+        	}
         }]
     };
 }]);
 
-app.filter('indivSearch', function(){
+module.filter('indivSearch', ['SdeInfo', function(SdeInfo){
+	var sdeData = SdeInfo.getData();
 	return function(pilots, search){ //list of pilots, search string
 		var filtered = [];
 		var re = new RegExp(search, 'i'); //search string, case insensitive & global
 		for(var i = 0; i < pilots.length; i++){
 			var pilot = pilots[i];
-			if(re.exists(pilot.name) 
-				|| re.exists(sdeData.ships[pilot.shipId].shipName)
-				|| re.exists(sdeData.ships[pilot.shipId].groupName)
-				|| re.exists(sdeData.ships[pilot.systemid].s)
-				|| re.exists(sdeData.ships[pilot.systemid].c)
-				|| re.exists(sdeData.ships[pilot.systemid].r)
-				//|| re.exists(sdeData.ships[pilot.systemid].s) //wingName
-				//|| re.exists(sdeData.ships[pilot.systemid].s) //squadName
-				|| re.exists(sdeData.ships[pilot.systemid].boosterName)
-				|| re.exists(sdeData.ships[pilot.systemid].roleName)){
+			if(re.exec(pilot.chaName) 
+				|| re.exec(sdeData.ships[pilot.shipId].shipName)
+				|| re.exec(sdeData.ships[pilot.shipId].groupName)
+				|| re.exec(sdeData.locations[pilot.systemid].s)
+				|| re.exec(sdeData.locations[pilot.systemid].c)
+				|| re.exec(sdeData.locations[pilot.systemid].r)
+				//|| re.exec(sdeData.ships[pilot.systemid].s) //wingName
+				//|| re.exec(sdeData.ships[pilot.systemid].s) //squadName
+				|| re.exec(pilot.boosterName)
+				|| re.exec(pilot.roleName)){
 				filtered.push(pilot)
 			}
 		} //for
 		return filtered;
 	}; //function
-});//filter
+}]);//filter

@@ -1,12 +1,51 @@
 <div class="col-md-12">
 	<h2>Individual.html</h2>
-	<p>This shows details about individual pilots. It is both sortable and filterable</p>
-	<p>Data is subject to the <a ng-click="alert('lol')">Universal Disclaimer</a>
-	<input type="text" ng-model="ind.search">
+	<p>This shows details about individual pilots. It is filterable via the box below. Some columns are sortable</p>
+	<p>Data is subject to the <a ng-click="ind.showGlobalDisclaimer()">Universal Disclaimer</a></p>
+	<p>Filter: <input type="text" ng-model="ind.search"></p>
 	<!-- Portrait, name, ship type, ship group, system, constellation, region, station, takesFleetWarp, wingName, squadName, boosterName, roleName, joinTime (how long ago?) -->
 	<!-- Too much. Also I currently lack wing and squad names-->
 	<!-- Also dropdowns on everything in case users need to be moved. Speedbumps? -->
 	<!-- Add corpName and allianceName from the xml api, it's just one more call -->
 
-	
+	<table class="table table-bordered table-condensed table-responsive" style="display:block">
+		<tr>
+			<!-- <th>Character</th> -->
+			<th><div sortable-col-header sort-type="ind.sortType" sort-reverse="ind.sortReverse" on-what="chaName">
+				Character</div></th>
+			<th>Ship Type</th>
+			<th>Ship Group</th>
+			<th>System</th>
+			<th>Constellation</th>
+			<th>Region</th>
+			<!-- <th>Fleet Warps</th> -->
+			<th><div sortable-col-header sort-type="ind.sortType" sort-reverse="ind.sortReverse" on-what="takesFleetWarp">
+				Fleet Warps</div></th>
+			<th>Wing Name</th>
+			<th>Squad Name</th>
+			<!-- <th>Booster Type</th> -->
+			<th><div sortable-col-header sort-type="ind.sortType" sort-reverse="ind.sortReverse" on-what="boosterName">
+				Booster Type</div></th>
+			<!-- <th>Role Type</th> -->
+			<th><div sortable-col-header sort-type="ind.sortType" sort-reverse="ind.sortReverse" on-what="roleName">
+				Role Type</div></th>
+			<!-- <th>Join Time</th> -->
+			<th><div sortable-col-header sort-type="ind.sortType" sort-reverse="ind.sortReverse" on-what="joinTime">
+				Join Time</div></th>
+		</tr>
+		<tr ng-repeat="pilot in ind.fleetmembers | indivSearch:ind.search | orderBy:ind.sortType:ind.sortReverse">
+			<td>{{pilot.chaName}}</td>
+			<td>{{ind.sdeData.ships[pilot.shipId].shipName}}</td>
+			<td>{{ind.sdeData.ships[pilot.shipId].groupName}}</td>
+			<td>{{ind.sdeData.locations[pilot.systemid].s}}</td>
+			<td>{{ind.sdeData.locations[pilot.systemid].c}}</td>
+			<td>{{ind.sdeData.locations[pilot.systemid].r}}</td>
+			<td>{{pilot.takesFleetWarp}}</td>
+			<td>{{pilot.wingID}}</td>
+			<td>{{pilot.squadID}}</td>
+			<td>{{pilot.boosterName}}</td>
+			<td>{{pilot.roleName}}</td>
+			<td>{{pilot.joinTime | date:'MM-dd H:mm:ss X'}}</td>
+		</tr>
+	</table>
 </div>
