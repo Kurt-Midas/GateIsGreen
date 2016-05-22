@@ -1,13 +1,13 @@
-angular.module('AggregateDirectiveModule',['SdeDataModule', 'FleetDataModule'])
-.directive('aggregateDirective',
-['FleetInfo', 'SdeInfo', function (FleetInfo, SdeInfo) {
+var module = angular.module('AggregateDirectiveModule',['FleetDataModule'])
+
+module.directive('aggregateDirective', [function () {
 	return {
 		restrict: 'E',
 		templateUrl: '/fleet/partials/Aggregate.html',
 		replace: true,
 		scope:{},
 		controllerAs: 'agg',
-		controller: ['$scope', 'FleetInfo', 'SdeInfo', function($scope, FleetInfo, SdeInfo){
+		controller: ['$scope', 'FleetInfo', function($scope, FleetInfo){
 			var agg = this;
 
 			agg.sortType = "chars.length";
@@ -31,16 +31,15 @@ angular.module('AggregateDirectiveModule',['SdeDataModule', 'FleetDataModule'])
 			agg.aggregates.groups = [];
 			function getGroupings(){
 				var fleetmembers = FleetInfo.getMembers();
-				var sdeData = SdeInfo.getData();
 				var groupings = [];
 				for(var i = 0; i < fleetmembers.length; i++){
 					// console.log("Iterating over member", i, "of", fleetmembers.length, angular.toJson(fleetmembers[i]));
 					var member = {};
-					if(agg.boxes.shipBox){member.shipType = sdeData.ships[fleetmembers[i].shipId].shipName;} //do the translation now?
-					if(agg.boxes.shipgroupBox){member.shipGroup = sdeData.ships[fleetmembers[i].shipId].groupName;} //yep, definitely do the translation
-					if(agg.boxes.systemBox){member.system = sdeData.locations[fleetmembers[i].systemid].s;}
-					if(agg.boxes.constelBox){member.constellation = sdeData.locations[fleetmembers[i].systemid].c;}
-					if(agg.boxes.regionBox){member.region = sdeData.locations[fleetmembers[i].systemid].r;}
+					if(agg.boxes.shipBox){member.shipType = fleetmembers[i].shipName;}
+					if(agg.boxes.shipgroupBox){member.shipGroup = fleetmembers[i].shipGroup;}
+					if(agg.boxes.systemBox){member.system = fleetmembers[i].system;} 
+					if(agg.boxes.constelBox){member.constellation = fleetmembers[i].constellation;}
+					if(agg.boxes.regionBox){member.region = fleetmembers[i].region;}
 					if(agg.boxes.fleetwarpBox){member.fleetwarp = fleetmembers[i].takesFleetWarp;}
 					if(agg.boxes.boosterBox){member.boosterName = fleetmembers[i].boosterName;}
 					if(agg.boxes.roleBox){member.roleName = fleetmembers[i].roleName;}
