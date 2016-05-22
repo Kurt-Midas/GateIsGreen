@@ -10,16 +10,14 @@ module.service('FleetCaller', ['$http', '$q', function($http, $q, FleetInfo){
 			$http.get(url)
 			.success(function(data){
 				if(!data || !data.fleetinfo || !data.members) { //what there is now
-					console.error("FleetCaller :: callFleetInfo error, missing required data",
-						angular.toJson(data));
+					// console.error("FleetCaller :: callFleetInfo error, missing required data",
+					// 	angular.toJson(data));
 					defer.reject("FleetCaller :: callFleetInfo error, missing required data");
-				} else {
-					//handle with $watch on sub-controllers or in the resolve callback?
-					defer.resolve({
-						"fleetinfo" : data.fleetinfo,
-						"members" : data.members
-					})
 				}
+				defer.resolve({
+					"fleetinfo" : data.fleetinfo,
+					"members" : data.members
+				});
 			})
 			return defer.promise;
 		},
@@ -47,7 +45,7 @@ module.service('FleetCaller', ['$http', '$q', function($http, $q, FleetInfo){
 	}
 }])
 
-module.service('FleetInfo', [function(){
+module.service('FleetInfo', ['SdeInfo', function(SdeInfo){
 	var fleetinfo = {};
 	var members = {};
 	return {
@@ -62,6 +60,20 @@ module.service('FleetInfo', [function(){
 		setData : function(fleetinfo, members){
 			console.log("Setting both fleetinfo, members");
 			this.fleetinfo = fleetinfo;
+			this.members = members;
+		},
+		setRichData : function(fleetinfo, members){
+			console.log("Setting fleetinfo and rich members");
+			this.fleetinfo = fleetinfo;
+			if(SdeInfo.getData().ships && SdeInfo.getData().locations){
+				angular.forEach(members, function(member){
+					member.shipName = SdeInfo.getData().ships[member.shipId].shipName;
+					member.shipGroup = SdeInfo.getData().ships[member.shipId].groupName;
+					member.system = SdeInfo.getData().locations[member.systemid].s;
+					member.constellation = SdeInfo.getData().locations[member.systemid].c;
+					member.region = SdeInfo.getData().locations[member.systemid].r;
+				})
+			}
 			this.members = members;
 		},
 		getMembers : function(){

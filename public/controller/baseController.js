@@ -1,8 +1,7 @@
 var app = angular.module('gateisgreen', 
 	['ngRoute', 'FleetControllerModule', 'SdeDataModule', 'FleetDataModule', 'LandingControllerModule']);
-	//'LandingModule', 'FleetModule', 'HandshakeCalls']);
 
-app.config(['$routeProvider', function($routeProvider, SdeCaller, SdeInfo){
+app.config(['$routeProvider', function($routeProvider){
 	$routeProvider
 	.when('/',{
 		templateUrl : 'landing/LandingBase.html',
@@ -18,25 +17,24 @@ app.config(['$routeProvider', function($routeProvider, SdeCaller, SdeInfo){
 				console.log("Resolving fleetKey");
 				return $route.current.params.fleetKey
 			},
-			isValidSession: function($route, FleetCaller, FleetInfo){
-				console.log("Resolving isValidSession");
-				return FleetCaller.callFleetInfo($route.current.params.fleetKey).then(function(data){
-					console.log("got data from fleetCaller.callFleetInfo");
-					FleetInfo.setData(data.fleetinfo, data.members);
-					return true;
-					//TODO: return fail case
-				});
-			},
-			isCalledInfo: function(SdeCaller, SdeInfo){
-				console.log("Resolving isCalledInfo");
-				return SdeCaller.callSdeData().then(function(data){
-					if(!data || !data.shipInfo || !data.locations){
-						//failed, console or something
+			loadSuccessful: function($route, $q, FleetCaller, SdeCaller, FleetInfo, SdeInfo){
+				console.log("resolving isCalledInfo");
+				let promises = {
+					sdeData: SdeCaller.callSdeData(),
+					fleetData: FleetCaller.callFleetInfo()};
+				return $q.all(promises).then(function(values){
+					if(!values.sdeData || !values.sdeData.shipInfo || !values.sdeData.locations){
+						console.error("Failed to resolve promise on sdeData");
 						return false;
 					}
-					SdeInfo.setData(data.shipInfo, data.locations);
+					if(!values.fleetData){
+						console.error("Failed to resolve promise on fleetData");
+						return false;
+					}
+					SdeInfo.setData(values.sdeData.shipInfo, values.sdeData.locations);
+					FleetInfo.setRichData(values.fleetData.fleetinfo, values.fleetData.members);
 					return true;
-				})
+				});
 			}
 		}
 	})

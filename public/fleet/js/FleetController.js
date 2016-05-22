@@ -3,12 +3,12 @@ var module = angular.module('FleetControllerModule',[
 	'WelcomeDirectiveModule', 'AggregateDirectiveModule', 'IndividualDirectiveModule', 'StructureDirectiveModule']);
 
 module.controller('FleetController', 
-			['fleetKey', 'isValidSession', 'isCalledInfo', 'SdeInfo', 'FleetInfo',
-			function(fleetKey, isValidSession, isCalledInfo, SdeInfo, FleetInfo){
+			['fleetKey', 'loadSuccessful', 'SdeInfo', 'FleetInfo',
+			function(fleetKey, loadSuccessful, SdeInfo, FleetInfo){
 
-	if(!fleetKey || !isValidSession || !isCalledInfo){
+	if(!fleetKey || !loadSuccessful){
 		//redirect to error page?
-		console.error("Bad resolve param:", fleetKey, isValidSession, isCalledInfo);
+		console.error("Bad resolve param:", fleetKey, loadSuccessful);
 	}
 
 	this.debugIsConnected = "FleetController connected"; //debug

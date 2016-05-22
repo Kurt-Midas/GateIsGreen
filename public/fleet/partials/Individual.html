@@ -10,36 +10,36 @@
 
 	<table class="table table-bordered table-condensed table-responsive" style="display:block">
 		<tr>
-			<!-- <th>Character</th> -->
 			<th><div sortable-col-header sort-type="ind.sortType" sort-reverse="ind.sortReverse" on-what="chaName">
 				Character</div></th>
-			<th>Ship Type</th>
-			<th>Ship Group</th>
-			<th>System</th>
-			<th>Constellation</th>
-			<th>Region</th>
-			<!-- <th>Fleet Warps</th> -->
+			<th><div sortable-col-header sort-type="ind.sortType" sort-reverse="ind.sortReverse" on-what="shipName">
+				Ship Type</div></th>
+			<th><div sortable-col-header sort-type="ind.sortType" sort-reverse="ind.sortReverse" on-what="shipGroup">
+				Ship Group</div></th>
+			<th><div sortable-col-header sort-type="ind.sortType" sort-reverse="ind.sortReverse" on-what="system">
+				System</div></th>
+			<th><div sortable-col-header sort-type="ind.sortType" sort-reverse="ind.sortReverse" on-what="constellation">
+				Constellation</div></th>
+			<th><div sortable-col-header sort-type="ind.sortType" sort-reverse="ind.sortReverse" on-what="region">
+				Region</div></th>
 			<th><div sortable-col-header sort-type="ind.sortType" sort-reverse="ind.sortReverse" on-what="takesFleetWarp">
 				Fleet Warps</div></th>
 			<th>Wing Name</th>
 			<th>Squad Name</th>
-			<!-- <th>Booster Type</th> -->
 			<th><div sortable-col-header sort-type="ind.sortType" sort-reverse="ind.sortReverse" on-what="boosterName">
 				Booster Type</div></th>
-			<!-- <th>Role Type</th> -->
 			<th><div sortable-col-header sort-type="ind.sortType" sort-reverse="ind.sortReverse" on-what="roleName">
 				Role Type</div></th>
-			<!-- <th>Join Time</th> -->
 			<th><div sortable-col-header sort-type="ind.sortType" sort-reverse="ind.sortReverse" on-what="joinTime">
 				Join Time</div></th>
 		</tr>
 		<tr ng-repeat="pilot in ind.fleetmembers | indivSearch:ind.search | orderBy:ind.sortType:ind.sortReverse">
 			<td>{{pilot.chaName}}</td>
-			<td>{{ind.sdeData.ships[pilot.shipId].shipName}}</td>
-			<td>{{ind.sdeData.ships[pilot.shipId].groupName}}</td>
-			<td>{{ind.sdeData.locations[pilot.systemid].s}}</td>
-			<td>{{ind.sdeData.locations[pilot.systemid].c}}</td>
-			<td>{{ind.sdeData.locations[pilot.systemid].r}}</td>
+			<td>{{pilot.shipName}}</td> <!-- ind.sdeData.ships[pilot.shipId].shipName}}</td> -->
+			<td>{{pilot.shipGroup}}</td> <!-- ind.sdeData.ships[pilot.shipId].groupName}}</td> -->
+			<td>{{pilot.system}}</td><!-- ind.sdeData.locations[pilot.systemid].s}}</td> -->
+			<td>{{pilot.constellation}}</td><!-- ind.sdeData.locations[pilot.systemid].c}}</td> -->
+			<td>{{pilot.region}}</td><!-- ind.sdeData.locations[pilot.systemid].r}}</td> -->
 			<td>{{pilot.takesFleetWarp}}</td>
 			<td>{{pilot.wingID}}</td>
 			<td>{{pilot.squadID}}</td>
