@@ -7,7 +7,7 @@ module.directive('individualDirective', [function () {
         replace: true,
         scope:{},
         controllerAs: 'ind',
-        controller: ['FleetInfo', function(FleetInfo){
+        controller: ['$scope', 'FleetInfo', function($scope, FleetInfo){
         	var ind = this;
         	ind.search = '';
         	ind.sortType = '';
@@ -18,6 +18,11 @@ module.directive('individualDirective', [function () {
         	ind.showGlobalDisclaimer = function(){
         		alert("butts lol");
         	}
+
+        	$scope.$on('refreshed-fleet-data', function(){
+				console.log("IndividualDirective :: heard refresh event");
+				ind.fleetmembers = FleetInfo.getMembers();
+			})
         }]
     };
 }]);

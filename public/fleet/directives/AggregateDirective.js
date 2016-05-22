@@ -29,7 +29,7 @@ module.directive('aggregateDirective', [function () {
 
 			agg.aggregates = {};
 			agg.aggregates.groups = [];
-			function getGroupings(){
+			agg.getGroupings = function(){
 				var fleetmembers = FleetInfo.getMembers();
 				var groupings = [];
 				for(var i = 0; i < fleetmembers.length; i++){
@@ -54,11 +54,15 @@ module.directive('aggregateDirective', [function () {
 				}//for
 				agg.aggregates.groups = groupings;
 			}
+			$scope.$on('refreshed-fleet-data', function(){
+				console.log("AggregateDirective :: heard refresh event");
+				agg.getGroupings();
+			})
 			$scope.$watch(
 				"agg.boxes", 
 				function(newValue, oldValue){
 					console.log("Saw change in agg.boxes");
-					getGroupings();
+					agg.getGroupings();
 				},//function
 				true //object refEq on $watch
 			)

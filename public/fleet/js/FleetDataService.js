@@ -3,7 +3,7 @@ var module = angular.module('FleetDataModule', [])
 module.service('FleetCaller', ['$http', '$q', function($http, $q, FleetInfo){
 	return {
 		//mock data
-		callFleetInfo: function(sessionId){
+		callFleetInfo_mock: function(sessionId){
 			var defer = $q.defer();
 			var url = '/mock/getMockCerbFleet/' + sessionId;
 			console.log("callFleetInfo :: using url", url);
@@ -13,16 +13,17 @@ module.service('FleetCaller', ['$http', '$q', function($http, $q, FleetInfo){
 					// console.error("FleetCaller :: callFleetInfo error, missing required data",
 					// 	angular.toJson(data));
 					defer.reject("FleetCaller :: callFleetInfo error, missing required data");
+				} else {
+					defer.resolve({
+						"fleetinfo" : data.fleetinfo,
+						"members" : data.members
+					});
 				}
-				defer.resolve({
-					"fleetinfo" : data.fleetinfo,
-					"members" : data.members
-				});
 			})
 			return defer.promise;
 		},
 		//temporary rename so I can work with mock data
-		callFleetInfo_real : function(sessionId){
+		callFleetInfo : function(sessionId){
 			var defer = $q.defer();
 			var url = '/fleet/getFleetInfo/' + sessionId;
 			console.log("callFleetInfo :: using url", url);

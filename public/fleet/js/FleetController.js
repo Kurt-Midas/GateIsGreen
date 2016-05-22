@@ -3,19 +3,28 @@ var module = angular.module('FleetControllerModule',[
 	'WelcomeDirectiveModule', 'AggregateDirectiveModule', 'IndividualDirectiveModule', 'StructureDirectiveModule']);
 
 module.controller('FleetController', 
-			['fleetKey', 'loadSuccessful', 'SdeInfo', 'FleetInfo',
-			function(fleetKey, loadSuccessful, SdeInfo, FleetInfo){
-
+			['$scope', 'fleetKey', 'loadSuccessful', 'SdeInfo', 'FleetInfo', 'FleetCaller',
+			function($scope, fleetKey, loadSuccessful, SdeInfo, FleetInfo, FleetCaller){
 	if(!fleetKey || !loadSuccessful){
 		//redirect to error page?
 		console.error("Bad resolve param:", fleetKey, loadSuccessful);
 	}
+	var fc = this;
 
-	this.debugIsConnected = "FleetController connected"; //debug
-	this.sdeInfo = SdeInfo.getData(); //{ships, locations}
-	//this.sdeInfo.ships
-	//this.sdeInfo.locations
-	this.fleetInfo = FleetInfo.getData(); //{fleetinfo, members}
-	//this.fleetInfo.fleetinfo
-	//this.fleetInfo.members
+	fc.debugIsConnected = "FleetController connected"; //debug
+	fc.sdeInfo = SdeInfo.getData(); //{ships, locations}
+	//fc.sdeInfo.ships
+	//fc.sdeInfo.locations
+	fc.fleetInfo = FleetInfo.getData(); //{fleetinfo, members}
+	//fc.fleetInfo.fleetinfo
+	//fc.fleetInfo.members
+	
+	fc.refreshFleetInfo = function(){
+		console.log("FleetController :: refreshFleetInfo");
+		FleetCaller.callFleetInfo(fleetKey).then(function(fleetData){
+			console.log("FleetController :: refreshFleetInfo :: inside then");
+			FleetInfo.setRichData(fleetData.fleetinfo, fleetData.members);
+			$scope.$broadcast('refreshed-fleet-data');
+		})
+	}
 }])
