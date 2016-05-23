@@ -14,14 +14,14 @@ app.config(['$routeProvider', function($routeProvider){
 		controllerAs: 'fc',
 		resolve : {
 			fleetKey: function($route){
-				console.log("Resolving fleetKey");
+				console.log("Resolving fleetKey", $route.current.params.fleetKey);
 				return $route.current.params.fleetKey
 			},
 			loadSuccessful: function($route, $q, FleetCaller, SdeCaller, FleetInfo, SdeInfo){
 				console.log("resolving isCalledInfo");
 				let promises = {
 					sdeData: SdeCaller.callSdeData(),
-					fleetData: FleetCaller.callFleetInfo()};
+					fleetData: FleetCaller.callFleetInfo($route.current.params.fleetKey)};
 				return $q.all(promises).then(function(values){
 					if(!values.sdeData || !values.sdeData.shipInfo || !values.sdeData.locations){
 						console.error("Failed to resolve promise on sdeData");

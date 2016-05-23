@@ -8,7 +8,8 @@ var router 		= express.Router();
 var bodyParser 	= require('body-parser');
 router.use(bodyParser.json());
 
-var ssoHandler 	= require('../crest/SSOHandler');
+// var ssoHandler 	= require('../crest/SSOHandler');
+var handshakeHandler = require('../crest/HandshakeHandler');
 
 
 const REDIRECT = 301;
@@ -21,13 +22,14 @@ const OKAY = 200;
  * @param  {[type]} res
  */
 router.post('/beginHandshake', function(req, res){
+	console.log("HandshakeRoutes :: beginHandshake route");
 	if(!req.body.fleetid){
 		res.status(403).send("Missing required field:fleetid"); //TODO: fix
 		//TODO: verify numeric. This is put into API calls, highly unsafe
 	}
-	ssoHandler.beginHandshake(req.body.fleetid, function(err, response){
+	handshakeHandler.beginHandshake(req.body.fleetid, function(err, response){
 		if(err){
-			console.log("HandshakeRoutes.createFleet :: Got error in ssoHandler.beginHandshake:", err);
+			console.log("HandshakeRoutes.createFleet :: Got error in handshakeHandler.beginHandshake:", err);
 			res.status(BAD_DEVELOPER).send("Failed to create session egg. This is bad, please contact the dev");
 		}
 		res.status(OKAY).send({"redirect": response});
@@ -35,14 +37,16 @@ router.post('/beginHandshake', function(req, res){
 });
 
 router.get('/completeHandshake', function(req, res){
+	console.log("HandshakeRoutes :: completeHandshake route");
 	if(!req.query.state || !req.query.code){
 		res.status(BAD_DEVELOPER).send("Please let me know if you successfully crash the site");
 	}
-	ssoHandler.completeHandshake(req.query.state, req.query.code, function(err, response){
+	handshakeHandler.completeHandshake(req.query.state, req.query.code, function(err, response){
 		if(err){
 			res.status(BAD_DEVELOPER).send(err); //make sure this is safe
 		}
 		res.status(OKAY).send(response); //??
+		// res.status(301).send('#/fleets/' + response);
 		//probably use a 301 redirect here instead. Modify when a route exists
 	})
 })

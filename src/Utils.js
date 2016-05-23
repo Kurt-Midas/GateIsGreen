@@ -20,7 +20,8 @@ module.exports = {
 		request.get(options, function(err, response, body){
 			if(!err || response.statusCode == 200){
 				var bodyObj = JSON.parse(body);
-				console.log("Successfully called remote api:", bodyObj)
+				// console.log("Successfully called remote api:", bodyObj)
+				console.log("Successfully called remote api at URL:", options.url);
 				callback(null, bodyObj);
 			} else {
 				console.error("Failed to call remote api with error:", err);
@@ -42,20 +43,4 @@ module.exports = {
 			}
 		})
 	}
-
-
-	/*var request = https.request(options, function(result){
-		var output = '';
-		result.on('data', function(chunk){
-			output += chunk;
-		});
-		result.on('end', function(){
-			var obj = JSON.parse(output);
-//			console.log(obj); 
-			callback(null, obj);
-		});
-	}).on('error', function(error){
-		console.error("Failed call with error", error);
-		callback(error);
-	}).end();*/
 }

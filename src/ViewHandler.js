@@ -11,20 +11,12 @@ module.exports = {
 				console.error("Failed to find character or location information, printing:", memberResponse.items[i]);
 				continue;
 			};
-			var charInfo = {
-				"id":		memberResponse.items[i].character.id_str,
-				"name":		memberResponse.items[i].character.name,
-				"shipId":	memberResponse.items[i].ship.id_str
-			};
-			var stationName = null;
-			if(memberResponse.items[i].station){
-				stationName = memberResponse.items[i].station.name
-			};
-			var locInfo = {
-				"systemid":	memberResponse.items[i].solarSystem.id_str,
-				"station":	memberResponse.items[i].station.name
-			};
-			var fleetInfo = {
+			var member = {
+				"chaId"	: 			memberResponse.items[i].character.id_str,
+				"chaName":			memberResponse.items[i].character.name,
+				"shipId":			memberResponse.items[i].ship.id_str,
+				"systemid":			memberResponse.items[i].solarSystem.id_str,
+				"station":			memberResponse.items[i].station.name,
 				"takesFleetWarp": 	memberResponse.items[i].takesFleetWarp,
 				"wingID":			memberResponse.items[i].wingID_str,
 				"squadID":			memberResponse.items[i].squadID_str,
@@ -33,12 +25,8 @@ module.exports = {
 				"boosterName":		memberResponse.items[i].boosterName,
 				"roleName":			memberResponse.items[i].roleName,
 				"joinTime":			memberResponse.items[i].joinTime
-			};
-			membersArray.push({
-				cha: 	charInfo,
-				loc: 	locInfo,
-				fleet: 	fleetInfo
-			});
+			}
+			membersArray.push(member);
 		};
 		return membersArray;
 	},
@@ -58,6 +46,26 @@ module.exports = {
 		// fleetResponse.wings.href; //not part of display
 	},
 	getWingDisplay : function(wingResponse){
-
+		if(!wingResponse || !wingResponse.items){
+			console.error("No wings?! Quite impossible. Error case or deleted fleet?", wingResponse)
+			return null;
+		}
+		var wings = {};
+		for(var i = 0; i < wingResponse.items.length; i++){
+			var wing = {};
+			wing.name 		= wingResponse.items[i].name;
+			wing.id 		= wingResponse.items[i].id_str
+			wing.squads 	= {}
+			for(var j = 0; j < wingResponse.items[i].squadsList.length; j++){
+				wing.squads[wingResponse.items[i].squadsList[j].id_str]
+					= wingResponse.items[i].squadsList[j].name;
+			}
+			wings[wingResponse.items[i].id_str] = wing;
+		}
+		return wings;
+	},
+	getAffiliationsDisplay : function(affResponse){
+		console.log("getAffiliationsDisplay :: affResponse", affResponse);
+		return "not implemented";
 	}
 }
