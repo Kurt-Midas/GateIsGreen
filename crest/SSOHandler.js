@@ -30,7 +30,7 @@ function useToken(token, type, callback){
 	utils.remotePost(postOptions, function(postErr, bodyObj){
 		if(postErr){
 			console.error("Call failed with error:", postErr);
-			callback(err);
+			callback(postErr);
 			return;
 		}
 		console.log("SSOHandler :: useToken, got access token from", type, "type with response", bodyObj);

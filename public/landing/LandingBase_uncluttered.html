@@ -1,0 +1,33 @@
+<row>
+	<div class="col-md-6">
+		<h3>Hello Alpha Tester / Prospective Partner!</h3>
+		<p>Gate Is Green is a fleet management tool. It allows you to view fleet member information in the browser in various helpful views.</p>
+		<p>The tool is under active development and your feedback / feature requests / bug reports / code reviews are critical to its success. Please contact me through Github, Twitter, or at my character "Kurt Midas"</p>
+		<p>I'm more than happy to help you deploy a non-public version.</p>
+		
+	</div>
+
+	<div class="col-md-6">
+		<h3>How to Use</h3>
+		<input type="number" ng-model="lc.fleetId">
+		<button ng-click="lc.beginHandshake()">Redirect to Eve SSO site</button>
+		<ol>
+			<li>As fleet boss, select "Copy External Fleet Link" and paste the NUMBER into the box above</li>
+			<li>The SSO button will redirect you to the official CCP SSO site. Log in and give the app
+				<ul>
+					<li>ONLY the character in charge of the fleet</li>
+					<li>ONLY fleetRead and fleetWrite permissions</li>
+				</ul>
+			</li>
+			<li>You will be redirected to the fleet management page. Only share the link with those you trust.</li>
+		</ol>
+		<h3>Concerns</h3>
+		<ul>
+			<li>Your link may become invalid at any time without warning. A crash bug will cause the app to restart and state is not preserved between launches.</li>
+			<li>Do not use this for important fleets. I cannot guarantee no security bugs.</li>
+			<li>Anyone with the fleet link can access the fleet. The three ways to invalidate a link are to disband the fleet, change the fleet boss, or use the Eve service site to remove this app's permissions</li>
+			<li>Do not use important characters. If I changed the code to extract your refresh token I could theoretically access any future fleet on that character. Use the Eve service site to remove this app's permissions</li>
+			<li>Most information is on a 30 second cache. I cannot control this.</li>
+		</ul>
+	</div>
+</row>

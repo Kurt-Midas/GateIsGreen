@@ -4,7 +4,7 @@ var app = angular.module('gateisgreen',
 app.config(['$routeProvider', function($routeProvider){
 	$routeProvider
 	.when('/',{
-		templateUrl : 'landing/LandingBase.html',
+		templateUrl : 'landing/LandingBase_uncluttered.html',
 		controller : 'LandingController',
 		controllerAs : 'lc'
 	})
@@ -32,7 +32,8 @@ app.config(['$routeProvider', function($routeProvider){
 						return false;
 					}
 					SdeInfo.setData(values.sdeData.shipInfo, values.sdeData.locations);
-					FleetInfo.setRichData(values.fleetData.fleetinfo, values.fleetData.members);
+					FleetInfo.setRichData(values.fleetData.fleetinfo, 
+						values.fleetData.members, values.fleetData.wings);
 					return true;
 				});
 			}
