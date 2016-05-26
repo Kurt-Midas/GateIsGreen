@@ -3,33 +3,34 @@ var module = angular.module('FleetDataModule', [])
 module.service('FleetCaller', ['$http', '$q', function($http, $q, FleetInfo){
 	return {
 		//mock data
-		callFleetInfo_mock: function(sessionId){
+		callFleetInfo: function(sessionId){
 			var defer = $q.defer();
 			var url = '/mock/getMockCerbFleet/' + sessionId;
 			console.log("callFleetInfo :: using url", url);
 			$http.get(url)
 			.success(function(data){
-				if(!data || !data.fleetinfo || !data.members) { //what there is now
+				if(!data || !data.fleetinfo || !data.members || !data.wings) { //what there is now
 					// console.error("FleetCaller :: callFleetInfo error, missing required data",
 					// 	angular.toJson(data));
 					defer.reject("FleetCaller :: callFleetInfo error, missing required data");
 				} else {
 					defer.resolve({
 						"fleetinfo" : data.fleetinfo,
-						"members" : data.members
+						"members" : data.members,
+						"wings" : data.wings
 					});
 				}
 			})
 			return defer.promise;
 		},
 		//temporary rename so I can work with mock data
-		callFleetInfo : function(sessionId){
+		callFleetInfo_real : function(sessionId){
 			var defer = $q.defer();
 			var url = '/fleet/getFleetInfo/' + sessionId;
 			console.log("callFleetInfo :: using url", url);
 			$http.get(url)
 			.success(function(data){
-				if(!data || !data.fleetinfo || !data.members) { //what there is now
+				if(!data || !data.fleetinfo || !data.members || !data.wings) { //what there is now
 					console.error("FleetCaller :: callFleetInfo error, missing required data",
 						angular.toJson(data));
 					defer.reject("FleetCaller :: callFleetInfo error, missing required data");
@@ -37,7 +38,8 @@ module.service('FleetCaller', ['$http', '$q', function($http, $q, FleetInfo){
 					//handle with $watch on sub-controllers or in the resolve callback?
 					defer.resolve({
 						"fleetinfo" : data.fleetinfo,
-						"members" : data.members
+						"members" : data.members,
+						"wings" : data.wings
 					})
 				}
 			})
@@ -47,25 +49,31 @@ module.service('FleetCaller', ['$http', '$q', function($http, $q, FleetInfo){
 }])
 
 module.service('FleetInfo', ['SdeInfo', function(SdeInfo){
-	var fleetinfo = {};
-	var members = {};
+	var data = {}
+	data.fleetinfo = {};
+	data.members = {};
+	data.wings = {};
 	return {
 		setFleetinfo : function(fleetinfo){
 			console.log("Setting fleetinfo");
-			this.fleetinfo = fleetinfo;
+			data.fleetinfo = fleetinfo;
 		},
 		setMembers : function(members){
 			console.log("Setting members");
-			this.members = members;
+			data.members = members;
 		},
-		setData : function(fleetinfo, members){
+		setWings : function(wings){
+			data.wings = wings;
+		},
+		setData : function(fleetinfo, members, wings){
 			console.log("Setting both fleetinfo, members");
-			this.fleetinfo = fleetinfo;
-			this.members = members;
+			data.fleetinfo = fleetinfo;
+			data.members = members;
+			data.wings = wings;
 		},
-		setRichData : function(fleetinfo, members){
+		setRichData : function(fleetinfo, members, wings){
 			console.log("Setting fleetinfo and rich members");
-			this.fleetinfo = fleetinfo;
+			data.fleetinfo = fleetinfo;
 			if(SdeInfo.getData().ships && SdeInfo.getData().locations){
 				angular.forEach(members, function(member){
 					member.shipName = SdeInfo.getData().ships[member.shipId].shipName;
@@ -73,21 +81,35 @@ module.service('FleetInfo', ['SdeInfo', function(SdeInfo){
 					member.system = SdeInfo.getData().locations[member.systemid].s;
 					member.constellation = SdeInfo.getData().locations[member.systemid].c;
 					member.region = SdeInfo.getData().locations[member.systemid].r;
+
+					if(wings[member.wingID]){
+						member.wingName = wings[member.wingID].name;
+						member.squadName = wings[member.wingID].squads[member.squadID];
+					} else {
+						member.wingName = "";
+						member.squadName = "";
+					}
 				})
 			}
-			this.members = members;
+			data.members = members;
+			data.wings = wings;
 		},
 		getMembers : function(){
-			return this.members;
+			return data.members;
 		},
 		getFleetInfo : function(){
-			return this.fleetinfo;
+			return data.fleetinfo;
+		},
+		getWings : function(){
+			return data.wings;
 		},
 		getData : function(){
-			return {
-				"fleetinfo" : this.fleetinfo,
-				"members" : this.members
-			}
+			return data;
+			// return {
+			// 	"fleetinfo" : data.fleetinfo,
+			// 	"members" : data.members,
+			// 	"wings" : data.wings
+			// }
 		}
 	}
 }])

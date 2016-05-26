@@ -23,7 +23,7 @@ module.controller('FleetController',
 		console.log("FleetController :: refreshFleetInfo");
 		FleetCaller.callFleetInfo(fleetKey).then(function(fleetData){
 			console.log("FleetController :: refreshFleetInfo :: inside then");
-			FleetInfo.setRichData(fleetData.fleetinfo, fleetData.members);
+			FleetInfo.setRichData(fleetData.fleetinfo, fleetData.members, fleetData.wings);
 			$scope.$broadcast('refreshed-fleet-data');
 		})
 	}

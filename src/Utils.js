@@ -18,7 +18,7 @@ module.exports = {
 	remoteGet : function(options, callback){
 		console.log("calling remote api with options:", options);
 		request.get(options, function(err, response, body){
-			if(!err || response.statusCode == 200){
+			if(!err && response.statusCode == 200){
 				var bodyObj = JSON.parse(body);
 				// console.log("Successfully called remote api:", bodyObj)
 				console.log("Successfully called remote api at URL:", options.url);
@@ -33,7 +33,7 @@ module.exports = {
 	remotePost : function(options, callback){
 		console.log("Calling remote api with options:", options);
 		request.post(options, function(err, response, body){
-			if(!err || response.statusCode == 200){
+			if(!err && response.statusCode == 200){
 				var bodyObj = JSON.parse(body);
 				console.log("Successfully called remote api:", bodyObj)
 				callback(null, bodyObj);

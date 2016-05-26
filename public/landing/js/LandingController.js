@@ -4,7 +4,7 @@ var module = angular.module('LandingControllerModule',[
 module.controller('LandingController', 
 			['$scope', '$http', '$q', '$window',
 			function($scope, $http, $q, $window){
-	this.fleetId = 1139911228458;
+	 this.fleetId = 1177611234687;
 
 	this.beginHandshake = function(){
 		console.log("inside beginHandshake");

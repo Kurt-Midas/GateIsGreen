@@ -45,9 +45,9 @@ router.get('/completeHandshake', function(req, res){
 		if(err){
 			res.status(BAD_DEVELOPER).send(err); //make sure this is safe
 		}
-		res.status(OKAY).send(response); //??
+		// res.status(OKAY).send(response); //??
 		// res.status(301).send('#/fleets/' + response);
-		//probably use a 301 redirect here instead. Modify when a route exists
+		res.redirect(301, '/#/fleets/' + response);
 	})
 })
 

@@ -23,12 +23,23 @@ router.get('/getMockCerbFleet/:fleetSessionId', function(req, res){
 	// fleet[0] //FC
 	var members = [];
 	members.push(createFleetMember(
-		fleet[0].ship.toString(), "1", "1", "1", "Fleet Booster", "1", "Wing Commander (Boss)"));
+		fleet[0].ship.toString(), "-1", "-1", "1", "Fleet Booster", "1", "Fleet Commander (Boss)"));
 	// console.log("About to create wings:", fleet.length);
+	var wings = {};
+	// wings["1234"] = { "name" : "LeaderWing", "id" : "1234", "squads" : [] }
 	for(var i = 1; i < fleet.length; i++){
 		// console.log("Iterating over createSquad");
-		members = members.concat(createSquad(fleet[i].ship, fleet[i].number, Math.floor(Math.random() * 10000 + 2159611200000),
-			Math.floor(Math.random() * 10000 + 3251811200000).toString()));
+		var wingNumber = Math.floor(Math.random() * 10000 + 2159611200000);
+		var squadNumber = Math.floor(Math.random() * 10000 + 3251811200000);
+		squads = {};
+		squads[squadNumber.toString()] = "Squad 1";
+		wing = {};
+		wing.name = "Wing " + (i+1);
+		wing.id = wingNumber.toString();
+		wing.squads = squads;
+		wings[wingNumber.toString()] = wing;
+		members = members.concat(createSquad(fleet[i].ship, fleet[i].number, wingNumber,
+			squadNumber.toString()));
 	}
 	res.status(200).send({
 		"fleetinfo":{
@@ -37,16 +48,17 @@ router.get('/getMockCerbFleet/:fleetSessionId', function(req, res){
 			"isFreeMove": true,
 			"isRegistered": true
 		},
-		"members": members
+		"members": members,
+		"wings": wings
 	})
 })
 
 function createSquad(ship, number, wingid, squadid){
 	var members = [];
 	// console.log("Creating squad with size:", number);
-	members.push(createFleetMember(ship, wingid, squadid, "3", "Squad Booster", "3", "Squad Commander"))
+	members.push(createFleetMember(ship, wingid, squadid, "3", "Squad Booster", "3", "Squad Leader"))
 	for(var i = 0; i < number; i++){
-		members.push(createFleetMember(ship, wingid, squadid, "4", "", "4", "Fleet Member"))
+		members.push(createFleetMember(ship, wingid, squadid, "0", "", "4", "Squad Member"))
 	}
 	return members;
 }
