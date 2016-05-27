@@ -19,12 +19,15 @@ module.controller('FleetController',
 	//fc.fleetInfo.fleetinfo
 	//fc.fleetInfo.members
 	
+	fc.working = false;
 	fc.refreshFleetInfo = function(){
+		fc.working = true;
 		console.log("FleetController :: refreshFleetInfo");
 		FleetCaller.callFleetInfo(fleetKey).then(function(fleetData){
 			console.log("FleetController :: refreshFleetInfo :: inside then");
 			FleetInfo.setRichData(fleetData.fleetinfo, fleetData.members, fleetData.wings);
 			$scope.$broadcast('refreshed-fleet-data');
+			fc.working = false;
 		})
 	}
 }])
