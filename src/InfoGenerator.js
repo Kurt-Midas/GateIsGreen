@@ -1,8 +1,7 @@
 /*
-Look for YAML files (now sqlite, it's easier in the short term)
-If they don't exist, fetch them
-Turn them into a json object
-Free ALL other resources but keep the json object
+1.	Look for data files (currently sqlite, future YAML)
+2.	Turn them into a json object
+3.	Keep the json object, free other resources
  */
 
 var info = {};

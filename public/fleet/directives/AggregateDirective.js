@@ -23,9 +23,8 @@ module.directive('aggregateDirective', [function () {
 			agg.boxes.boosterBox		= false;
 			agg.boxes.roleBox 			= false;
 
-			// agg.boxes.chanameBox = false;
-			// agg.boxes.wingBox = false; 	//TODO:	implement wing endpoints
-			// agg.boxes.squadBox = false;	//TODO: implement squad endpoints
+			// add wingID and squadID boxes? 
+			// Implement when popover is implemented, marginally useful otherwise
 
 			agg.aggregates = {};
 			agg.aggregates.groups = [];

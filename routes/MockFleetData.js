@@ -15,12 +15,8 @@ var cerbFleet = [
 //...I just realized I don't know how fleets work. TIL I suck at Eve
 
 router.get('/getMockCerbFleet/:fleetSessionId', function(req, res){
-	// if(!req.params.fleetSessionId){
-	// 	res.status(500).send("Missing required parameter 'key'")
-	// }
 	console.log("inside getMockCerbFleet");
 	var fleet = cerbFleet;
-	// fleet[0] //FC
 	var members = [];
 	members.push(createFleetMember(
 		fleet[0].ship.toString(), "-1", "-1", "1", "Fleet Booster", "1", "Fleet Commander (Boss)"));
@@ -87,6 +83,6 @@ var firstNames = ["Paul", "Bill", "Durr", "Dumb", "Smart",
 	"Lord", "Killer", "Red", "Archer", "XxXXx"];
 var lastNames = ["Archer", "Smith", "DeVille", "Beast", "Nope",
 	"Hurr", "xXXxX", "Random", "DUMB", "Penguins"]
-var systems = ["30001835", "30002960", "30002187", "30001198"] //GERUSALEM
+var systems = ["30001835", "30002960", "30002187", "30001198"] //GERUSALEM THE PROMISED LAND, LOST BUT NOT FORGOTTEN
 
 module.exports = router;

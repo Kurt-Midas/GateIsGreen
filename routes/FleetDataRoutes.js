@@ -19,7 +19,7 @@ router.get('/getFleetInfo/:fleetSessionId', function(req, res){
 	var key = req.params.fleetSessionId;
 	fleetService.getFleetInfo(key, function(err, fleetDisplay){
 		if(err){
-			res.status(500).send("error getting fleet info");
+			res.status(500).send(err);
 		}
 		res.status(200).send(fleetDisplay);
 	});

@@ -1,7 +1,6 @@
 app.directive('sortableColHeader',[function () {
 	return {
         restrict: 'EA',
-        // template: '',
         templateUrl: '/fleet/partials/ColHeader.html',
         replace: true,
         transclude: true,

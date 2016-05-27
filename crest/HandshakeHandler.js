@@ -1,26 +1,9 @@
-/*
-	1.	Receive a request from the user. Some parts of the request are saved in an in-memory sqlite3 database (known format). 
-		fleetid, auth_token, refresh_token, index(sha1())
-		Endpoint responds with res.redirect(301, '#CREST_LOGIN' + args and stuff + localhost:#PORT' + req.path and stuff)
-			state is the nosql id
-	2.	AngularJS has a route to catch the response from the SSO
-		Turns state into nosql call
-		nosql contains {fleetid, auth_token, refresh_token}
- */
-
 var config = require('config');
 var sha1 = require('sha1');
 var url = require('url');
-// var utils = require('../src/Utils')
-
-// router.use(bodyParser.json());
-
 
 var sessionManager = require('./SessionDbManager');
 var ssoHandler = require('./SSOHandler');
-
-// const REDIRECT = 301;
-// const BAD_DEVELOPER = 500;
 
 module.exports = {
 	/**
@@ -69,13 +52,10 @@ module.exports = {
 					callback("Auth token may be expired or invalid");
 					return;
 				}
-				//state + fleetid is unsafe
-				//Fleetids appear to be sequential-ish
+				//state + fleetid may be unsafe
+				//FleetIDs appear to have a limited range (not sequential)
 				//finding the registred appID or intercepting state allows walking the possible keys
-				//TODO: add time factor here (and to state)
 				var key = sha1(state + fleetid);
-				// console.log(info);
-				// sessionManager.createFleetDBSession(info, function(persistErr, dbKey){
 				sessionManager.createFleetDBSession(key, fleetid, authToken, refreshToken, function(persistErr, dbKey){
 					//creates a database entry for a fleet session. Errors are unlikely and probably very bad
 					if(persistErr){
@@ -84,13 +64,6 @@ module.exports = {
 						return;
 					}
 					callback(null, dbKey);
-					/*var members = require('./Members');
-					members.getFleetInfo(key, function(memberErr, result){
-						if(memberErr){
-							res.status(500).send("didn't work, check logs");
-						}
-						res.status(200).send(result);
-					})*/
 				})
 			})
 		})
