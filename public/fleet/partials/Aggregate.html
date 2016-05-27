@@ -1,46 +1,42 @@
 <div class="col-md-12">
+	<div>
 	<!-- TODO: add charName, wingName, squadName columns-->
-	<!-- TODO: add sorting and searching/filtering -->
+	<h2 class="pull-right">
+		<button class="btn btn-success" ng-click="fc.refreshFleetInfo()" ng-class="{'disabled':fc.working}">
+			<span ng-hide="fc.working">Refresh Fleet Info</span>
+			<span ng-show="fc.working">Loading...</span>
+		</button>
+	</h2>
 	<p>Select as many or as few boxes as desired.</p>
-	<p>Design insight: It's difficult to get pilot-specific info here like sec status/zkb links/leadership skills for performance reasons (no way to aggregate CREST calls). If you think this is important I'll build a Pilot Info view that opens a new tab</p>
-	<div class="btn-group" data-toggle="buttons-checkbox">
-		<button type="button" class="btn-success active" autocomplete="off"
-			ng-click="agg.boxes.shipBox = !agg.boxes.shipBox">
-			Ship Type</button>
-		<button type="button" class="btn-success" autocomplete="off"
-			ng-click="agg.boxes.shipgroupBox = !agg.boxes.shipgroupBox">
-			Ship Group</button>
+	<p>Design insight: It's difficult to get pilot-specific info here like sec status/zkb links/leadership skills for performance reasons (no way to aggregate the calls). If you think this is important I'll build a Pilot Info view that opens a new tab or make a subset of calls</p>
+
+	<row>
+	<div class="btn-group">
+		<label class="btn btn-primary" ng-model="agg.boxes.shipBox" uib-btn-checkbox>Ship Type</label>
+		<label class="btn btn-primary" ng-model="agg.boxes.shipgroupBox" uib-btn-checkbox>Ship Group</label>
 	</div>
-	<div class="btn-group" data-toggle="buttons-checkbox">
-		<button type="button" class="btn-success" autocomplete="off"
-			ng-click="agg.boxes.systemBox = !agg.boxes.systemBox">
-			System</button>
-		<button type="button" class="btn-success" autocomplete="off"
-			ng-click="agg.boxes.constelBox = !agg.boxes.constelBox">
-			Constellation</button>
-		<button type="button" class="btn-success" autocomplete="off"
-			ng-click="agg.boxes.regionBox = !agg.boxes.regionBox">
-			Region</button>
+
+	<div class="btn-group">
+		<label class="btn btn-primary" ng-model="agg.boxes.systemBox" uib-btn-checkbox>System</label>
+		<label class="btn btn-primary" ng-model="agg.boxes.constelBox" uib-btn-checkbox>Constellation</label>
+		<label class="btn btn-primary" ng-model="agg.boxes.regionBox" uib-btn-checkbox>Region</label>
 	</div>
-	<div class="btn-group" data-toggle="buttons-checkbox">
-		<button type="button" class="btn-success" autocomplete="off"
-			ng-click="agg.boxes.fleetwarpBox = !agg.boxes.fleetwarpBox">
-			Takes fleet warp</button>
+
+	<div class="btn-group">
+		<label class="btn btn-primary" ng-model="agg.boxes.fleetwarpBox" uib-btn-checkbox>Takes Fleet Warp</label>
 	</div>
-	<div class="btn-group" data-toggle="buttons-checkbox">
-		<button type="button" class="btn-success" autocomplete="off"
-			ng-click="agg.boxes.boosterBox = !agg.boxes.boosterBox">
-			Booster Type</button>
+	<div class="btn-group">
+		<label class="btn btn-primary" ng-model="agg.boxes.boosterBox" uib-btn-checkbox>Booster Type</label>
 	</div>
-	<div class="btn-group" data-toggle="buttons-checkbox">
-		<button type="button" class="btn-success" autocomplete="off"
-			ng-click="agg.boxes.roleBox = !agg.boxes.roleBox">
-			Role Type</button>
+	<div class="btn-group">
+		<label class="btn btn-primary" ng-model="agg.boxes.roleBox" uib-btn-checkbox>Role Type</label>
 	</div>
 
 	<!-- <h4>Debug <small>{{agg.aggregates.groups}}</small> </h4> -->
 	<!-- <p>{{agg.aggregates}}</p> -->
-	<p>Sort on: {{agg.sortType}}, Reversed?: {{agg.sortReverse}}</p>
+	<!-- <p>Sort on: {{agg.sortType}}, Reversed?: {{agg.sortReverse}}</p>-->
+	</row>
+
 	<table class="table table-striped table-hover">
 		<tr>
 			<th>
@@ -92,4 +88,5 @@
 			<td ng-if="agg.boxes.roleBox">{{group.roleName}}</td>
 		</tr>
 	</table>
+	</div>
 </div>
