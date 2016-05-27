@@ -3,45 +3,52 @@ var module = angular.module('FleetDataModule', [])
 module.service('FleetCaller', ['$http', '$q', function($http, $q, FleetInfo){
 	return {
 		//mock data
-		callFleetInfo_mock: function(sessionId){
+		callFleetInfo: function(sessionId){
 			var defer = $q.defer();
 			var url = '/mock/getMockCerbFleet/' + sessionId;
 			console.log("callFleetInfo :: using url", url);
 			$http.get(url)
-			.success(function(data){
-				if(!data || !data.fleetinfo || !data.members || !data.wings) { //what there is now
+			.then(function successCallback(response){
+				if(!response.data || !response.data.fleetinfo || !response.data.members || !response.data.wings) {
+					console.error("FleetDataService :: callFleetInfo_mock :: not all required parameters");
 					// console.error("FleetCaller :: callFleetInfo error, missing required data",
 					// 	angular.toJson(data));
-					defer.reject("FleetCaller :: callFleetInfo error, missing required data");
+					defer.reject("FleetCaller :: callFleetInfo error, missing required response.data");
 				} else {
 					defer.resolve({
-						"fleetinfo" : data.fleetinfo,
-						"members" : data.members,
-						"wings" : data.wings
+						"fleetinfo" : response.data.fleetinfo,
+						"members" : response.data.members,
+						"wings" : response.data.wings
 					});
 				}
+			}, function errorCallback(response){
+				console.error("FleetDataService :: callFleetInfo_mock :: errorCallback with response", response);
+				defer.reject();
 			})
 			return defer.promise;
 		},
 		//temporary rename so I can work with mock data
-		callFleetInfo : function(sessionId){
+		callFleetInfo_real : function(sessionId){
 			var defer = $q.defer();
 			var url = '/fleet/getFleetInfo/' + sessionId;
 			console.log("callFleetInfo :: using url", url);
 			$http.get(url)
-			.success(function(data){
-				if(!data || !data.fleetinfo || !data.members || !data.wings) { //what there is now
+			.then(function successCallback(response){
+				if(!response.data || !response.data.fleetinfo || !response.data.members || !response.data.wings) { //what there is now
 					console.error("FleetCaller :: callFleetInfo error, missing required data",
-						angular.toJson(data));
+						angular.toJson(response.data));
 					defer.reject("FleetCaller :: callFleetInfo error, missing required data");
 				} else {
 					//handle with $watch on sub-controllers or in the resolve callback?
 					defer.resolve({
-						"fleetinfo" : data.fleetinfo,
-						"members" : data.members,
-						"wings" : data.wings
+						"fleetinfo" : response.data.fleetinfo,
+						"members" : response.data.members,
+						"wings" : response.data.wings
 					})
 				}
+			}, function errorCallback(response){
+				console.error("FleetDataService :: callFleetInfo_real :: errorCallback with response", response);
+				defer.reject();
 			})
 			return defer.promise;
 		}

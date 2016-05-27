@@ -4,15 +4,17 @@ module.service('SdeCaller', ['$http', '$q', function($http, $q){
 	return {
 		callSdeData: function() {
 			var defer = $q.defer();
-			$http.get('/info')
-			.success(function(data) {
-				if(!data.shipInfo || !data.locationInfo){
-					defer.reject("Data Failure");
+			$http.get('/info').then(function successCallback(response) {
+				if(!response.data.shipInfo || !response.data.locationInfo){
+					defer.reject("response.data Failure");
 				}
 				defer.resolve({
-					"shipInfo": 	data.shipInfo,
-					"locations":	data.locationInfo
+					"shipInfo": 	response.data.shipInfo,
+					"locations":	response.data.locationInfo
 				});
+			}, function errorCallback(response){
+				console.error("SdeDataService :: callSdeData :: ErrorCallback with response", response);
+				defer.reject();
 			});
 			return defer.promise;
 		}
