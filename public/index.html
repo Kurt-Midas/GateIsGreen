@@ -5,6 +5,9 @@
 	<title>Gate Is Green</title>
 	<!-- <link rel="shortcut icon" type="image/png" href="img/favicon.png"> -->
 	<meta name="author" content="Kurt Midas">
+	<meta name="description" content="An Eve Online 3rd party tool for viewing fleets">
+	<meta name="keywords" content="eve online, fleet management, fleet viewer, eve, fleet, FC, tool, 3rd party, CREST">
+	<!-- <link rel="shortcut icon" type="image/png" href="img/22_32_24.png"> -->
 
 	<script src="bower_components/jquery/dist/jquery.min.js"></script>
 	<script src="bower_components/angular/angular.min.js"></script>
@@ -28,19 +31,19 @@
 </head>
 
 <body ng-app="gateisgreen">
-	<div ng-hide="true">
-		<p>This app doesn't work in the in-game browser</p>
-		<p>The IGB only supports up to Angular 1.2 but I'm using 1.4</p>
-		<p>CCP PLZ</p>
-	</div>
 
 	<div class="container-fluid" ng-controller="BaseController as bc">
 		<row>
-			<div class="page-header col-md-12"> 
+			<!-- <div class="page-header col-md-12">  -->
 				<h2>Gate Is Green <small>alpha</small></h2>
-			</div>
+			<!-- </div> -->
 		</row>
-		</hr> <!-- ??? -->
+		<div ng-hide="true">
+			<h1 style="color:red">Please use a modern browser</h1>
+			<p>This app is an RIA (rich internet application) using AngularJS 1.4. Outdated browsers, including the in-game-browser, do not support that framework.</p>
+			<p>If you are using an updated browser, please check the console for errors and report this issue</p>
+		</div>
+
 		<ng-view></ng-view>
 	</div>
 	<!-- TODO: nav -->
