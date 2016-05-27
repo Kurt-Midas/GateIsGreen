@@ -39,8 +39,8 @@ module.filter('indivSearch', [function(){
 				|| re.exec(pilot.system) 
 				|| re.exec(pilot.constellation) 
 				|| re.exec(pilot.region) 
-				//|| re.exec(sdeData.ships[pilot.systemid].s) //wingName
-				//|| re.exec(sdeData.ships[pilot.systemid].s) //squadName
+				|| re.exec(pilot.wingName)
+				|| re.exec(pilot.squadName)
 				|| re.exec(pilot.boosterName)
 				|| re.exec(pilot.roleName)){
 				filtered.push(pilot)

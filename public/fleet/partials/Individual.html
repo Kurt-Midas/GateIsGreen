@@ -1,4 +1,10 @@
 <div class="col-md-12">
+	<h2 class="pull-right">
+		<button class="btn btn-success" ng-click="fc.refreshFleetInfo()" ng-class="{'disabled':fc.working}">
+			<span ng-hide="fc.working">Refresh Fleet Info</span>
+			<span ng-show="fc.working">Loading...</span>
+		</button>
+	</h2>
 	<p>This shows details about individual pilots. It is filterable via the box below. Some columns are sortable</p>
 	<p>Data is subject to the <a ng-click="ind.showGlobalDisclaimer()">Universal Disclaimer</a></p>
 	<p>Filter: <input type="text" ng-model="ind.search"></p>
@@ -23,8 +29,10 @@
 				Region</div></th>
 			<th><div sortable-col-header sort-type="ind.sortType" sort-reverse="ind.sortReverse" on-what="takesFleetWarp">
 				Fleet Warps</div></th>
-			<th>Wing Name</th>
-			<th>Squad Name</th>
+			<th><div sortable-col-header sort-type="ind.sortType" sort-reverse="ind.sortReverse" on-what="wingName">
+				Wing Name</div></th>
+			<th><div sortable-col-header sort-type="ind.sortType" sort-reverse="ind.sortReverse" on-what="squadName">
+				Squad Name</div></th>
 			<th><div sortable-col-header sort-type="ind.sortType" sort-reverse="ind.sortReverse" on-what="boosterName">
 				Booster Type</div></th>
 			<th><div sortable-col-header sort-type="ind.sortType" sort-reverse="ind.sortReverse" on-what="roleName">
@@ -40,8 +48,8 @@
 			<td>{{pilot.constellation}}</td><!-- ind.sdeData.locations[pilot.systemid].c}}</td> -->
 			<td>{{pilot.region}}</td><!-- ind.sdeData.locations[pilot.systemid].r}}</td> -->
 			<td>{{pilot.takesFleetWarp}}</td>
-			<td>{{pilot.wingID}}</td>
-			<td>{{pilot.squadID}}</td>
+			<td>{{pilot.wingName}}</td> <!-- <td>{{pilot.wingID}}</td> -->
+			<td>{{pilot.squadName}}</td> <!-- <td>{{pilot.squadID}}</td> -->
 			<td>{{pilot.boosterName}}</td>
 			<td>{{pilot.roleName}}</td>
 			<td>{{pilot.joinTime | date:'MM-dd H:mm:ss X'}}</td>
