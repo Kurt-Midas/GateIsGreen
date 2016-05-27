@@ -1,4 +1,10 @@
 <div class="col-md-12">
+	<h2 class="pull-right">
+		<button class="btn btn-success" ng-click="fc.refreshFleetInfo()" ng-class="{'disabled':fc.working}">
+			<span ng-hide="fc.working">Refresh Fleet Info</span>
+			<span ng-show="fc.working">Loading...</span>
+		</button>
+	</h2>
 	
 	<p>Plans for this tab include create/delete/rename wings and squads and move/kick/invite pilots</p>
 	<p>If you have feature requests, let me know.</p>
@@ -6,19 +12,23 @@
 
  	<table class="table table-hover table-condensed">
  		<tr>
- 			<td colspan="5"><h4>Fleet</h4></td>
+ 			<td colspan="6"><h4>Fleet</h4></td>
 		</tr>
-		<tr>
- 			<!-- <td colspan="3">{{str.fleetStructure.leader}}</td> -->
+		<tr ng-hide="str.fleetStructure.leader">
+			<td colspan="6">No Fleet Leader</td>
+		</tr>
+		<tr ng-show="str.fleetStructure.leader">
  			<td colspan="3">{{str.fleetStructure.leader.chaName}}</td>
+ 			<td>{{str.fleetStructure.leader.boosterName}}</td>
  			<td>{{str.fleetStructure.leader.shipName}}</td>
  			<td>{{str.fleetStructure.leader.system}}</td>
  		</tr>
  		<tr ng-repeat-start="wing in str.fleetStructure.wings">
- 			<td colspan="5"><h4>{{wing.name}}</h4></td>
+ 			<td colspan="6"><h4>{{wing.name}}</h4></td>
  		</tr>
  		<tr ng-show="wing.leader">
  			<td colspan="3">{{wing.leader.chaName}}</td>
+ 			<td>{{wing.leader.boosterName}}</td>
  			<td>{{wing.leader.shipName}}</td>
  			<td>{{wing.leader.system}}</td>
  		</tr>
@@ -27,20 +37,22 @@
  		</tr>
 		<tr ng-repeat-start="squad in wing.squads">
 			<td></td>
- 			<td colspan="4"><h4>{{squad.name}}</h4></td>
+ 			<td colspan="5"><h4>{{squad.name}}</h4></td>
  		</tr>
  		<tr ng-show="squad.leader">
  			<td></td>
  			<td colspan="2">{{squad.leader.chaName}}</td>
+ 			<td>{{squad.leader.boosterName}}</td>
  			<td>{{squad.leader.shipName}}</td>
  			<td>{{squad.leader.system}}</td>
  		</tr>
  		<tr ng-hide="squad.leader">
- 			<td/><td colspan="4">No Squad Leader</td>
+ 			<td/><td colspan="5">No Squad Leader</td>
  		</tr>
  		<tr ng-repeat-start="pilot in squad.members">
  			<td></td><td></td>
  			<td colspan="1">{{pilot.chaName}}</td>
+ 			<td>{{pilot.boosterName}}</td>
  			<td>{{pilot.shipName}}</td>
  			<td>{{pilot.system}}</td>
  		</tr>

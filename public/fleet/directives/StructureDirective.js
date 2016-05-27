@@ -10,7 +10,6 @@ module.directive('structureDirective',[function () {
         controllerAs: 'str',
         controller: ['$scope', 'FleetInfo', function($scope, FleetInfo){
         	var str = this;
-        	// str.fleetmembers = FleetInfo.getMembers();
             str.fleetStructure = buildFleetStructure();
             /**
              * Creates independent object for structure (does not modify FleetInfo)
@@ -43,13 +42,11 @@ module.directive('structureDirective',[function () {
                         "chaName" : member.chaName,
                         "shipName" : member.shipName,
                         "system" : member.system,
-                        "boosterID" : member.boosterID,
+                        "boosterName" : member.boosterName,
                         "roleID" : member.roleID,
                         "takesFleetWarp" : member.takesFleetWarp,
                         "station" : member.station
                     }
-                    //this logic may be totally off
-                    //TODO: figure out the reply for all possible positions in the fleet
                     if(member.wingID == -1){
                         //fleet leader, has no wing or squad
                         fleetStructure.leader = pilot;
@@ -73,7 +70,6 @@ module.directive('structureDirective',[function () {
 
             $scope.$on('refreshed-fleet-data', function(){
                 console.log("structureDirective :: heard refresh event");
-                // ind.fleetmembers = FleetInfo.getMembers();
                 str.fleetStructure = buildFleetStructure();
             })
         }]
