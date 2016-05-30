@@ -4,9 +4,13 @@ var module = angular.module('LandingControllerModule',[
 module.controller('LandingController', 
 			['$scope', '$http', '$q', '$window',
 			function($scope, $http, $q, $window){
-	this.fleetId = 1172911235095; 
+	// this.fleetId; 
 
 	this.beginHandshake = function(){
+		if(!this.fleetId){
+			console.log("beginHandshake :: need to set a fleetId first");
+			return;
+		}
 		console.log("inside beginHandshake");
 		var postData = {
 			method: 'POST',

@@ -1,6 +1,6 @@
 /*
 	handshakeInit		//create fleet egg. Returns URL of SSO page
-	handshakeConfirm 	//initialize, create fleet session. Redirect to '/fleet/#fleetid' or '/handshakeError'
+	handshakeConfirm 	//initialize, create fleet session. Redirect to '/fleet/#fleetid' or '/handshakeError' (TODO)
  */
 
 var express 	= require('express');
@@ -8,9 +8,7 @@ var router 		= express.Router();
 var bodyParser 	= require('body-parser');
 router.use(bodyParser.json());
 
-// var ssoHandler 	= require('../crest/SSOHandler');
 var handshakeHandler = require('../crest/HandshakeHandler');
-
 
 const REDIRECT = 301;
 const BAD_DEVELOPER = 500;
@@ -24,16 +22,21 @@ const OKAY = 200;
 router.post('/beginHandshake', function(req, res){
 	console.log("HandshakeRoutes :: beginHandshake route");
 	if(!req.body.fleetid){
-		res.status(403).send("Missing required field:fleetid"); //TODO: fix
-		//TODO: verify numeric. This is put into API calls, highly unsafe
+		console.log("beginHandshake route :: no fleetid was sent");
+		res.status(403).send("Missing required field:fleetid"); 
+	} 
+	else if(isNaN(req.body.fleetid)){
+		console.log("beginHandshake route :: non-numeric fleetid was sent:", req.body.fleetid);
+		res.status(403).send("Invalid required field:fleetid");
+	} else {
+		handshakeHandler.beginHandshake(req.body.fleetid, function(err, response){
+			if(err){
+				console.log("HandshakeRoutes.createFleet :: Got error in handshakeHandler.beginHandshake:", err);
+				res.status(BAD_DEVELOPER).send("Failed to create session egg. This is bad, please contact the dev");
+			}
+			res.status(OKAY).send({"redirect": response});
+		})
 	}
-	handshakeHandler.beginHandshake(req.body.fleetid, function(err, response){
-		if(err){
-			console.log("HandshakeRoutes.createFleet :: Got error in handshakeHandler.beginHandshake:", err);
-			res.status(BAD_DEVELOPER).send("Failed to create session egg. This is bad, please contact the dev");
-		}
-		res.status(OKAY).send({"redirect": response});
-	})
 });
 
 router.get('/completeHandshake', function(req, res){
@@ -45,8 +48,6 @@ router.get('/completeHandshake', function(req, res){
 		if(err){
 			res.status(BAD_DEVELOPER).send(err); //make sure this is safe
 		}
-		// res.status(OKAY).send(response); //??
-		// res.status(301).send('#/fleets/' + response);
 		res.redirect(301, '/#/fleets/' + response);
 	})
 })

@@ -27,6 +27,8 @@
 				Constellation</div></th>
 			<th><div sortable-col-header sort-type="ind.sortType" sort-reverse="ind.sortReverse" on-what="region">
 				Region</div></th>
+			<th><div sortable-col-header sort-type="ind.sortType" sort-reverse="ind.sortReverse" on-what="station">
+				Station</div></th>
 			<th><div sortable-col-header sort-type="ind.sortType" sort-reverse="ind.sortReverse" on-what="takesFleetWarp">
 				Fleet Warps</div></th>
 			<th><div sortable-col-header sort-type="ind.sortType" sort-reverse="ind.sortReverse" on-what="wingName">
@@ -47,12 +49,13 @@
 			<td>{{pilot.system}}</td><!-- ind.sdeData.locations[pilot.systemid].s}}</td> -->
 			<td>{{pilot.constellation}}</td><!-- ind.sdeData.locations[pilot.systemid].c}}</td> -->
 			<td>{{pilot.region}}</td><!-- ind.sdeData.locations[pilot.systemid].r}}</td> -->
+			<td>{{pilot.station}}</td><!-- ind.sdeData.locations[pilot.systemid].r}}</td> -->
 			<td>{{pilot.takesFleetWarp}}</td>
 			<td>{{pilot.wingName}}</td> <!-- <td>{{pilot.wingID}}</td> -->
 			<td>{{pilot.squadName}}</td> <!-- <td>{{pilot.squadID}}</td> -->
 			<td>{{pilot.boosterName}}</td>
 			<td>{{pilot.roleName}}</td>
-			<td>{{pilot.joinTime | date:'MM-dd H:mm:ss X'}}</td>
+			<td>{{pilot.joinTime | date:'MM-dd H:mm:ss Z'}}</td>
 		</tr>
 	</table>
 </div>

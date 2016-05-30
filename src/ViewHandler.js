@@ -11,6 +11,10 @@ module.exports = {
 				console.error("Failed to find character or location information, printing:", memberResponse.items[i]);
 				continue;
 			};
+			if(memberResponse.items[i].roleName && memberResponse.items[i].roleName.includes('(Boss)')){
+				console.log("ViewHandler :: getMemberDisplay :: Fleet Boss Name is '", 
+					memberResponse.items[i].character.name,"'");
+			} 
 			var member = {
 				"chaId"	: 			memberResponse.items[i].character.id_str,
 				"chaName":			memberResponse.items[i].character.name,

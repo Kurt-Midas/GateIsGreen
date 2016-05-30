@@ -3,14 +3,16 @@
 	<div class="col-md-6">
 		<h3>Hello Alpha Tester / Prospective Partner!</h3>
 		<p>Gate Is Green is a fleet management tool. It allows you to view fleet member information in the browser in various helpful views.</p>
-		<p>The tool is under active development and your feedback / feature requests / bug reports / code reviews are critical to its success. Please contact me through <a href="https://github.com/Kurt-Midas/GateIsGreen/issues" target="_blank">Github Issues Reporter</a> or my character <img src="https://image.eveonline.com/Character/95095202_32.png"> "Kurt Midas"</p>
+		<p>The tool is under active development and your feedback / feature requests / bug reports / code reviews are critical to its success. Please contact me through <a href="https://github.com/Kurt-Midas/GateIsGreen/issues" target="_blank">Github Issues Reporter</a> or my character <img src="https://image.eveonline.com/Character/95095202_32.jpg"> "Kurt Midas"</p>
 		<p>I'm more than happy to help you deploy a non-public version.</p>
+
+		<p><span style="color:red">WARNING:</span> during alpha testing, there may be logger statements containing information that could allow me to access your fleet / duplicate or repeat calls / test new features. I will not do this without your permission. I also have a log statement showing me the name of the fleet boss in case I need to contact you for some reason.</p>
 		
 	</div>
 
 	<div class="col-md-6">
 		<h3>How to Use</h3>
-		<input type="number" ng-model="lc.fleetId">
+		<input type="number" ng-model="lc.fleetId" placeholder="Numeric fleet ID">
 		<button ng-click="lc.beginHandshake()">Redirect to Eve SSO site</button>
 		<ol>
 			<li>As fleet boss, select "Copy External Fleet Link" and paste the NUMBER into the box above</li>
