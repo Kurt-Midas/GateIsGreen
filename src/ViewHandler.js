@@ -15,6 +15,7 @@ module.exports = {
 				console.log("ViewHandler :: getMemberDisplay :: Fleet Boss Name is '", 
 					memberResponse.items[i].character.name,"'");
 			} 
+			var stationName = "";
 			if(memberResponse.items[i].station){
 				stationName = memberResponse.items[i].station.name;
 			}
