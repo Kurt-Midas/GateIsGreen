@@ -15,12 +15,15 @@ module.exports = {
 				console.log("ViewHandler :: getMemberDisplay :: Fleet Boss Name is '", 
 					memberResponse.items[i].character.name,"'");
 			} 
+			if(memberResponse.items[i].station){
+				stationName = memberResponse.items[i].station.name;
+			}
 			var member = {
 				"chaId"	: 			memberResponse.items[i].character.id_str,
 				"chaName":			memberResponse.items[i].character.name,
 				"shipId":			memberResponse.items[i].ship.id_str,
 				"systemid":			memberResponse.items[i].solarSystem.id_str,
-				"station":			memberResponse.items[i].station.name,
+				"station":			stationName,
 				"takesFleetWarp": 	memberResponse.items[i].takesFleetWarp,
 				"wingID":			memberResponse.items[i].wingID_str,
 				"squadID":			memberResponse.items[i].squadID_str,
